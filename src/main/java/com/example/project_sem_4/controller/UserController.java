@@ -6,6 +6,7 @@ import com.example.project_sem_4.model.request.CreateUserReq;
 import com.example.project_sem_4.model.res.AuthRes;
 import com.example.project_sem_4.security.JwtTokenUtil;
 import com.example.project_sem_4.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
+@Tag(name = "User", description = "User management APIs")
 @RestController
 public class UserController {
 
