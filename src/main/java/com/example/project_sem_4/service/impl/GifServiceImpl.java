@@ -152,6 +152,18 @@ public class GifServiceImpl implements GifService {
     }
 
     @Override
+    public Gif saveGifForBrand(String url, Brand brand) {
+        Gif gif = new Gif();
+
+        gif.setUrl(url);
+        gif.setBrand(brand);
+        gif.setStatus(1);
+        brand.addGif(gif);
+
+        return gifRepository.save(gif);
+    }
+
+    @Override
     public Gif saveGifForRestaurant(String url, Restaurant restaurant) {
         Gif gif = new Gif();
 

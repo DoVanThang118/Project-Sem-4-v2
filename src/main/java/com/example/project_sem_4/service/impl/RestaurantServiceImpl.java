@@ -1,9 +1,11 @@
 package com.example.project_sem_4.service.impl;
 
+import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.mapper.RestaurantMapper;
 import com.example.project_sem_4.model.req.RestaurantReq;
+import com.example.project_sem_4.repository.BrandRepository;
 import com.example.project_sem_4.repository.RestaurantRepository;
 import com.example.project_sem_4.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private BrandRepository brandRepository;
+
 
     @Override
     public RestaurantDTO createRestaurant(RestaurantReq req) {
@@ -30,6 +35,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             if (restaurant != null) {
                 throw new RuntimeException("Restaurant is already in use");
             }
+        }
+        if (req.getBrandId() != null) {
+            Optional<Brand> brand = brandRepository.findById(req.getBrandId());
+            brand.ifPresent(req::setBrand);
         }
         Restaurant restaurant = RestaurantMapper.INSTANCE.mapReqToEntity(req);
         restaurantRepository.save(restaurant);

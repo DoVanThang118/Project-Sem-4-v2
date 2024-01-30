@@ -34,17 +34,16 @@ public class ProductReq {
     private String type;
 
     private Integer status;
-
+    //
     private Category category;
-
     private String nameCategory;
-
+    //
     private Restaurant restaurant;
-
+    private Long restaurantId;
+    //
     private List<Gif> gifs = new ArrayList<>();
-
     private List<MultipartFile> img;
-
+    //
     private int pageNumber = 0;
 
     private int pageSize = 20;

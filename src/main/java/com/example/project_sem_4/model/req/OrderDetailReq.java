@@ -21,9 +21,15 @@ public class OrderDetailReq {
 
     private Integer status;
 
+    //
     private Order order;
+    private Long orderId;
+    //
 
+    //
     private Cart cart;
+    private Long cartId;
+    //
 
     private int pageNumber = 0;
 

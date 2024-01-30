@@ -32,7 +32,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public List<OrderDetailDTO> create(User user) {
         List<Cart> carts = cartRepository.findByUser(user);
         if (carts == null) {
-            throw new RuntimeException("Not Found Cart");
+            throw new RuntimeException("Cart null");
         }
         List<OrderDetail> item = new ArrayList<>();
 

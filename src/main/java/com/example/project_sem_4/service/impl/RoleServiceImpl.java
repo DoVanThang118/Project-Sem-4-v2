@@ -2,6 +2,7 @@ package com.example.project_sem_4.service.impl;
 
 import com.example.project_sem_4.entity.Role;
 import com.example.project_sem_4.model.dto.RoleDTO;
+import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.mapper.RoleMapper;
 import com.example.project_sem_4.model.req.RoleReq;
 import com.example.project_sem_4.repository.RoleRepository;
@@ -21,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Page<RoleDTO> getRole(Pageable pageable, String name, String description, Integer status) {
         Page<Role> roles = roleRepository.findRoles(pageable, name, description, status);
-        return RoleMapper.pageDTO(roles);
+        return roles.map(RoleMapper.INSTANCE::mapEntityToDTO);
     }
 
     @Override
@@ -29,10 +30,10 @@ public class RoleServiceImpl implements RoleService {
         if (req == null) {
             throw new RuntimeException("NullPointerException");
         }
-        Role role = RoleMapper.toRole(req);
+        Role role = RoleMapper.INSTANCE.mapReqToEntity(req);
         role.setStatus(1);
         roleRepository.save(role);
-        return RoleMapper.roleDTO(role);
+        return RoleMapper.INSTANCE.mapEntityToDTO(role);
     }
 
     @Override

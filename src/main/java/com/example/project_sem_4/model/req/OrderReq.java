@@ -34,9 +34,10 @@ public class OrderReq {
 
     private Set<User> users;
 
+    //
     private List<Long> orderDetailId;
-
     private List<OrderDetail> orderDetails = new ArrayList<>();
+    //
 
     private int pageNumber = 0;
 

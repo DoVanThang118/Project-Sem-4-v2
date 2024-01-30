@@ -22,7 +22,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Page<BrandDTO> getBrand(Pageable pageable, String name, String description, String hotline, String email) {
         Page<Brand> brands = brandRepository.findBrands(pageable, name, description, hotline, email);
-        return BrandMapper.pageDTO(brands);
+        return brands.map(BrandMapper.INSTANCE::mapEntityToDTO);
     }
 
     @Override
@@ -36,9 +36,9 @@ public class BrandServiceImpl implements BrandService {
                 throw new RuntimeException("Brand is already in use");
             }
         }
-        Brand brand = BrandMapper.toBrand(req);
+        Brand brand = BrandMapper.INSTANCE.mapReqToEntity(req);
         brandRepository.save(brand);
-        return BrandMapper.brandDTO(brand);
+        return BrandMapper.INSTANCE.mapEntityToDTO(brand);
     }
 
     @Override

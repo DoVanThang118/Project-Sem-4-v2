@@ -30,4 +30,6 @@ public interface GifService {
     Gif saveGifForCategory(String url, Category category);
 
     Gif saveGifForProduct(String url, Product product);
+
+    Gif saveGifForBrand(String url, Brand brand);
 }

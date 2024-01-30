@@ -18,9 +18,10 @@ public class CartReq {
 
     private Integer status;
 
+    //
     private Long productId;
-
     private Product product;
+    //
 
     private int pageNumber = 0;
 

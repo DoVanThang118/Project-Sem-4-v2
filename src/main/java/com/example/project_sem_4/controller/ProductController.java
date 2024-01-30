@@ -46,9 +46,16 @@ public class ProductController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductReq req, @PathVariable Long id) {
+    public ResponseEntity<?> updateProduct(@ModelAttribute ProductReq req, @PathVariable Long id) {
         req.setId(id);
         ProductDTO update = productService.createProduct(req);
+        List<Gif> files = new ArrayList<>();
+        for (MultipartFile file : req.getImg()) {
+            String url = gifService.uploadFile(file);
+            Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(update));
+            files.add(gif);
+        }
+        update.setGifs(files);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 

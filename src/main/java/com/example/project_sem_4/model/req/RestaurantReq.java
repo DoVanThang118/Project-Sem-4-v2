@@ -30,13 +30,17 @@ public class RestaurantReq {
 
     private Integer status;
 
+    //
     private Brand brand;
+    private Long brandId;
+    //
 
     private List<Product> products = new ArrayList<>();
 
+    //
     private List<Gif> gifs = new ArrayList<>();
-
     private List<MultipartFile> img;
+    //
 
     private int pageNumber = 0;
 

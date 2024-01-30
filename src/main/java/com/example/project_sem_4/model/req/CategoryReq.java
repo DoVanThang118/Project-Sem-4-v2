@@ -27,9 +27,10 @@ public class CategoryReq {
 
     private List<Product> products = new ArrayList<>();
 
+    //
     private List<Gif> gifs = new ArrayList<>();
-
     private List<MultipartFile> img;
+    //
 
     private int pageNumber = 0;
 
