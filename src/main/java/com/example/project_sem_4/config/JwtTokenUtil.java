@@ -33,14 +33,13 @@ public class JwtTokenUtil {
         // 2. Mã hóa token sử dụng thuật toán HS512 và key bí mật
         // 3. Convert thành chuỗi URL an toàn
         // 4. Cộng chuỗi đã sinh ra với tiền tố Bearer
-        String token = Jwts.builder()
+
+        return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + duration * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
-
-        return PREFIX + token;
     }
 
     // Lấy thông tin được lưu trong token

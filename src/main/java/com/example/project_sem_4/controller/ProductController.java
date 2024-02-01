@@ -2,6 +2,7 @@ package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.Gif;
 import com.example.project_sem_4.model.dto.ProductDTO;
+import com.example.project_sem_4.model.mapper.CategoryMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.ProductReq;
 import com.example.project_sem_4.model.res.DataRes;
@@ -36,12 +37,14 @@ public class ProductController {
     public ResponseEntity<?> saveProduct(@ModelAttribute ProductReq req) {
         List<Gif> files = new ArrayList<>();
         ProductDTO create = productService.createProduct(req);
-        for (MultipartFile file : req.getImg()) {
-            String url = gifService.uploadFile(file);
-            Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(create));
-            files.add(gif);
+        if (req.getImg() != null) {
+            for (MultipartFile file : req.getImg()) {
+                String url = gifService.uploadFile(file);
+                Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(create));
+                files.add(gif);
+            }
+            create.setGifs(files);
         }
-        create.setGifs(files);
         return ResponseEntity.ok(create);
     }
 
@@ -50,12 +53,14 @@ public class ProductController {
         req.setId(id);
         ProductDTO update = productService.createProduct(req);
         List<Gif> files = new ArrayList<>();
-        for (MultipartFile file : req.getImg()) {
-            String url = gifService.uploadFile(file);
-            Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(update));
-            files.add(gif);
+        if (req.getImg() != null) {
+            for (MultipartFile file : req.getImg()) {
+                String url = gifService.uploadFile(file);
+                Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(update));
+                files.add(gif);
+            }
+            update.setGifs(files);
         }
-        update.setGifs(files);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 

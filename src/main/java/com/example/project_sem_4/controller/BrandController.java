@@ -55,12 +55,14 @@ public class BrandController {
     public ResponseEntity<?> saveBrand(@ModelAttribute BrandReq req) {
         List<Gif> files = new ArrayList<>();
         BrandDTO create = brandService.saveBrand(req);
-        for (MultipartFile file : req.getImg()) {
-            String url = gifService.uploadFile(file);
-            Gif gif = gifService.saveGifForBrand(url, BrandMapper.INSTANCE.mapDTOToEntity(create));
-            files.add(gif);
+        if (req.getImg() != null) {
+            for (MultipartFile file : req.getImg()) {
+                String url = gifService.uploadFile(file);
+                Gif gif = gifService.saveGifForBrand(url, BrandMapper.INSTANCE.mapDTOToEntity(create));
+                files.add(gif);
+            }
+            create.setGifs(files);
         }
-        create.setGifs(files);
         return ResponseEntity.ok(create);
     }
 
@@ -70,12 +72,14 @@ public class BrandController {
         req.setId(id);
         BrandDTO update = brandService.saveBrand(req);
         List<Gif> files = new ArrayList<>();
-        for (MultipartFile file : req.getImg()) {
-            String url = gifService.uploadFile(file);
-            Gif gif = gifService.saveGifForBrand(url, BrandMapper.INSTANCE.mapDTOToEntity(update));
-            files.add(gif);
+        if (req.getImg() != null) {
+            for (MultipartFile file : req.getImg()) {
+                String url = gifService.uploadFile(file);
+                Gif gif = gifService.saveGifForBrand(url, BrandMapper.INSTANCE.mapDTOToEntity(update));
+                files.add(gif);
+            }
+            update.setGifs(files);
         }
-        update.setGifs(files);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.Gif;
 import com.example.project_sem_4.model.dto.CategoryDTO;
+import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.CategoryMapper;
 import com.example.project_sem_4.model.req.CategoryReq;
 import com.example.project_sem_4.model.res.DataRes;
@@ -36,19 +37,30 @@ public class CategoryController {
     public ResponseEntity<?> saveCategory(@ModelAttribute CategoryReq req) {
         List<Gif> files = new ArrayList<>();
         CategoryDTO create = categoryService.createCategory(req);
-        for (MultipartFile file : req.getImg()) {
-            String url = gifService.uploadFile(file);
-            Gif gif = gifService.saveGifForCategory(url, CategoryMapper.INSTANCE.mapDTOToEntity(create));
-            files.add(gif);
+        if (req.getImg() != null) {
+            for (MultipartFile file : req.getImg()) {
+                String url = gifService.uploadFile(file);
+                Gif gif = gifService.saveGifForCategory(url, CategoryMapper.INSTANCE.mapDTOToEntity(create));
+                files.add(gif);
+            }
+            create.setGifs(files);
         }
-        create.setGifs(files);
         return ResponseEntity.ok(create);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@RequestBody CategoryReq req, @PathVariable Long id) {
+    public ResponseEntity<?> updateCategory(@ModelAttribute CategoryReq req, @PathVariable Long id) {
         req.setId(id);
         CategoryDTO update = categoryService.createCategory(req);
+        List<Gif> files = new ArrayList<>();
+        if (req.getImg() != null) {
+            for (MultipartFile file : req.getImg()) {
+                String url = gifService.uploadFile(file);
+                Gif gif = gifService.saveGifForCategory(url, CategoryMapper.INSTANCE.mapDTOToEntity(update));
+                files.add(gif);
+            }
+            update.setGifs(files);
+        }
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 

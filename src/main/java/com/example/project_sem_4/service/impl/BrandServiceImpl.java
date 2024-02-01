@@ -30,12 +30,12 @@ public class BrandServiceImpl implements BrandService {
         if (req == null) {
             throw new RuntimeException("NullPointerException");
         }
-        if (req.getId() == null ) {
-            Brand brand = brandRepository.findByName(req.getName());
-            if (brand != null) {
-                throw new RuntimeException("Brand is already in use");
-            }
-        }
+//        if (req.getId() == null ) {
+//            Brand find = brandRepository.findByName(req.getName());
+//            if (find != null) {
+//                throw new RuntimeException("Brand is already in use");
+//            }
+//        }
         Brand brand = BrandMapper.INSTANCE.mapReqToEntity(req);
         brandRepository.save(brand);
         return BrandMapper.INSTANCE.mapEntityToDTO(brand);

@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             throw new RuntimeException("Email is already in use");
         }
-        Role role = roleRepository.findByName("EMPLOYEE");
+        Role role = roleRepository.findByName("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         if (req.getType() != null) {
