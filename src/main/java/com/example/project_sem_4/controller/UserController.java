@@ -81,26 +81,26 @@ public class UserController {
         return ResponseEntity.ok(new AuthRes(jwt));
     }
 
-    @GetMapping("")
+    @GetMapping("/api/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getUser() {
         List<UserDTO> users = userService.getUser();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/users/{id}")
     public ResponseEntity<?> findId(@PathVariable Long id) {
         UserDTO result = userService.findId(id);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/api/users/search")
     public ResponseEntity<?> searchUser(@RequestParam(value = "keyword", required = false, defaultValue = "") String name) {
         List<UserDTO> users = userService.searchUser(name);
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping("/list")
+    @PostMapping("/api/users/list")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getUsers(@RequestBody UserReq req) throws ParseException {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
@@ -120,13 +120,13 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody UserReq req, @PathVariable Long id) {
         UserDTO result = userService.updateUser(req, id);
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("Delete Success");
