@@ -14,13 +14,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public User findByEmail(String email);
 
     @Query(value = "select u from User u " +
-            "where (coalesce(:name, null) is null or u.name like %:name%) " +
-            "and (coalesce(:email, null) is null or u.email like %:email%) " +
-            "and (coalesce(:tel, null) is null or u.tel like %:tel%) " +
-            "and (coalesce(:address, null) is null or u.address like %:address%) " +
-            "and (coalesce(:birthday, null) is null or u.birthday in (:birthday)) " +
-            "and (coalesce(:type, null) is null or u.type like %:type%) " +
-            "and (coalesce(:status, null) is null or u.status in (:status)) "
+            "where (:name is null or u.name like %:name%) " +
+            "and (:email is null or u.email like %:email%) " +
+            "and (:tel is null or u.tel like %:tel%) " +
+            "and (:address is null or u.address like %:address%) " +
+            "and (:birthday is null or u.birthday in (:birthday)) " +
+            "and (:type is null or u.type like %:type%) " +
+            "and (:status is null or u.status in (:status)) "
     )
     Page<User> findUsers(Pageable pageable, String name, String email, String tel, String address, Date birthday, String type, Integer status);
 }

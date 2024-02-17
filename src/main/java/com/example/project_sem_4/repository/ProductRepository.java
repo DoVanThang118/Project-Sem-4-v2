@@ -12,13 +12,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Product findByName(String name);
     @Query(value = "select p from Product p join p.category c " +
-            "where (coalesce(:name, null) is null or p.name like %:name%) " +
-            "and (coalesce(:description, null) is null or p.description like %:description%) " +
-            "and (coalesce(:price, null) is null or p.price in (:price)) " +
-            "and (coalesce(:status, null) is null or p.status in (:status)) " +
-            "and (coalesce(:type, null) is null or p.type like %:type%) " +
-            "and (coalesce(:rate, null) is null or p.rate in (:rate)) " +
-            "and (coalesce(:category, null) is null or c.name like %:category%) "
+            "where (:name is null or p.name like %:name%) " +
+            "and (:description is null or p.description like %:description%) " +
+            "and (:price is null or p.price in (:price)) " +
+            "and (:status is null or p.status in (:status)) " +
+            "and (:type is null or p.type like %:type%) " +
+            "and (:rate is null or p.rate in (:rate)) " +
+            "and (:category is null or c.name like %:category%) "
     )
     Page<Product> findProducts(Pageable pageable, String name, String description, Double price, Integer status, String type, Integer rate, String category);
 }

@@ -12,12 +12,12 @@ import java.util.List;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    
-    
-    @Query(value = "select c from Cart c " +
-            "where (coalesce(:status, null) is null or c.status in (:status)) ")
-    Page<Cart> findCarts(Pageable pageable, Integer status);
 
+//    @Query(value = "select c from Cart c " +
+//            "where (coalesce(:status, null) is null or c.status in (:status)) ")
+    @Query(value = "select c from Cart c " +
+            "where (:status is null or c.status in (:status)) ")
+    Page<Cart> findCarts(Pageable pageable, Integer status);
 
     List<Cart> findByUser(User user);
 }

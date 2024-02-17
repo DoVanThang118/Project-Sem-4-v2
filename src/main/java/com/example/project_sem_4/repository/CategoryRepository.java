@@ -13,9 +13,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Category findByName(String name);
 
     @Query(value = "select c from Category c " +
-            "where (coalesce(:name, null) is null or c.name like %:name%) " +
-            "and (coalesce(:description, null) is null or c.description like %:description%) " +
-            "and (coalesce(:status, null) is null or c.status in (:status)) "
+            "where (:name is null or c.name like %:name%) " +
+            "and (:description is null or c.description like %:description%) " +
+            "and (:status is null or c.status in (:status)) "
     )
     Page<Category> findCategories(Pageable pageable, String name, String description, Integer status);
 }
