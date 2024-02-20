@@ -16,11 +16,12 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 //            "and (coalesce(:email, null) is null or b.email like %:email%) "
 //    )
     @Query(value = "SELECT b FROM Brand b " +
-            "WHERE (:name IS NULL OR b.name LIKE %:name%) " +
+            "WHERE (:id is null OR b.id in (:id)) " +
+            "AND (:name IS NULL OR b.name LIKE %:name%) " +
             "AND (:description IS NULL OR b.description LIKE %:description%) " +
             "AND (:hotline IS NULL OR b.hotline LIKE %:hotline%) " +
             "AND (:email IS NULL OR b.email LIKE %:email%)")
-    Page<Brand> findBrands(Pageable pageable, String name, String description, String hotline, String email);
+    Page<Brand> findBrands(Pageable pageable,Long id, String name, String description, String hotline, String email);
 
     Brand findByName(String name);
 }

@@ -6,11 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface BrandService {
-    Page<BrandDTO> getBrand(Pageable pageable, String name, String description, String hotline, String email);
+    Page<BrandDTO> getBrand(Pageable pageable, Long id, String name, String description, String hotline, String email);
 
     BrandDTO saveBrand(BrandReq req);
 
     void deleteBrand(Long id);
+
+    Page<BrandDTO> getAllBrands(Pageable pageable);
 }

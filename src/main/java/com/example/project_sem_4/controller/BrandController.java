@@ -2,6 +2,7 @@ package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.Gif;
 import com.example.project_sem_4.model.dto.BrandDTO;
+import com.example.project_sem_4.model.dto.UserDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.BrandReq;
@@ -35,10 +36,12 @@ public class BrandController {
     private GifService gifService;
 
     @PostMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getBrand(@RequestBody BrandReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<BrandDTO> page = brandService.getBrand(
                 pageable,
+                req.getId(),
                 req.getName(),
                 req.getDescription(),
                 req.getHotline(),
@@ -47,6 +50,17 @@ public class BrandController {
         DataRes res = new DataRes();
         res.setData(page.getContent());
         res.setPagination(new Pagination(page.getPageable().getPageNumber(), page.getSize(), page.getTotalElements()));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllBrands() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<BrandDTO> brands = brandService.getAllBrands(pageable);
+        DataRes res = new DataRes();
+        res.setData(brands.getContent());
+        res.setPagination(new Pagination(brands.getPageable().getPageNumber(), brands.getSize(), brands.getTotalElements()));
         return ResponseEntity.ok(res);
     }
 
