@@ -1,7 +1,9 @@
 package com.example.project_sem_4.service.impl;
 
+import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Product;
 import com.example.project_sem_4.model.dto.ProductDTO;
+import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.ProductReq;
 import com.example.project_sem_4.repository.ProductRepository;
@@ -36,8 +38,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDTO> getProducts(Pageable pageable, String name, String description, Double price, Integer status, String type, Integer rate, String category) {
-        Page<Product> products = productRepository.findProducts(pageable, name, description, price, status, type, rate, category);
+    public Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, String category) {
+        Page<Product> products = productRepository.findProducts(pageable, id, name, description, price, status, type, rate, category);
         return products.map(ProductMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -52,5 +54,11 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete product");
         }
+    }
+
+    @Override
+    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(ProductMapper.INSTANCE::mapEntityToDTO);
     }
 }

@@ -13,11 +13,7 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    List<UserDTO> getUser();
-
-    UserDTO findId(Long id);
-
-    List<UserDTO> searchUser(String keyword);
+    Page<UserDTO> getAllUsers(Pageable pageable);
 
     UserDTO createUser(UserReq req);
 
@@ -27,5 +23,5 @@ public interface UserService {
 
     User findByEmail(String name);
 
-    Page<UserDTO> getUsers(Pageable pageable, String name, String email, String tel, String address, Date birthday, String type, Integer status);
+    Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, Date birthday, String type, Integer status);
 }

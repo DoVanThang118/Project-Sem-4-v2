@@ -1,6 +1,7 @@
 package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.Gif;
+import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.ProductDTO;
 import com.example.project_sem_4.model.mapper.CategoryMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +36,7 @@ public class ProductController {
     private GifService gifService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> saveProduct(@ModelAttribute ProductReq req) {
         List<Gif> files = new ArrayList<>();
         ProductDTO create = productService.createProduct(req);
@@ -49,6 +52,7 @@ public class ProductController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@ModelAttribute ProductReq req, @PathVariable Long id) {
         req.setId(id);
         ProductDTO update = productService.createProduct(req);
@@ -65,6 +69,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Delete Success");
@@ -75,6 +80,7 @@ public class ProductController {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<ProductDTO> page = productService.getProducts(
                 pageable,
+                req.getId(),
                 req.getName(),
                 req.getDescription(),
                 req.getPrice(),
@@ -86,6 +92,16 @@ public class ProductController {
         DataRes res = new DataRes();
         res.setData(page.getContent());
         res.setPagination(new Pagination(page.getPageable().getPageNumber(), page.getSize(), page.getTotalElements()));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllProducts() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<ProductDTO> products = productService.getAllProducts(pageable);
+        DataRes res = new DataRes();
+        res.setData(products.getContent());
+        res.setPagination(new Pagination(products.getPageable().getPageNumber(), products.getSize(), products.getTotalElements()));
         return ResponseEntity.ok(res);
     }
 }

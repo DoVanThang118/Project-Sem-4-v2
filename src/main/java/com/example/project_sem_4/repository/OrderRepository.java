@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "select o from Order o " +
-            "where (:status is null or o.status in (:status)) ")
-    Page<Order> findOrders(Pageable pageable, Integer status);
+            "WHERE (:id is null OR o.id in (:id)) " +
+            "and (:status is null or o.status in (:status)) ")
+    Page<Order> findOrders(Pageable pageable, Long id, Integer status);
 }

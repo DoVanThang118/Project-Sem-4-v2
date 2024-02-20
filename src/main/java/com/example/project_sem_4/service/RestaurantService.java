@@ -1,5 +1,6 @@
 package com.example.project_sem_4.service;
 
+import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.req.RestaurantReq;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,9 @@ public interface RestaurantService {
 
     RestaurantDTO createRestaurant(RestaurantReq req);
 
-    Page<RestaurantDTO> getRestaurant(Pageable pageable, String name, String description, String tel, String address, Integer status);
+    Page<RestaurantDTO> getRestaurant(Pageable pageable, Long id, String name, String description, String tel, String address, Integer status);
 
     void deleteRestaurant(Long id);
+
+    Page<RestaurantDTO> getAllRestaurants(Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.Gif;
+import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.mapper.RestaurantMapper;
 import com.example.project_sem_4.model.req.RestaurantReq;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +35,7 @@ public class RestaurantController {
     private GifService gifService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> saveRestaurant(@ModelAttribute RestaurantReq req) {
         List<Gif> files = new ArrayList<>();
         RestaurantDTO create = restaurantService.createRestaurant(req);
@@ -48,6 +51,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateRestaurant(@ModelAttribute RestaurantReq req, @PathVariable Long id) {
         req.setId(id);
         RestaurantDTO update = restaurantService.createRestaurant(req);
@@ -64,6 +68,7 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurant(id);
         return ResponseEntity.ok("Delete Success");
@@ -74,6 +79,7 @@ public class RestaurantController {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<RestaurantDTO> page = restaurantService.getRestaurant(
                 pageable,
+                req.getId(),
                 req.getName(),
                 req.getDescription(),
                 req.getTel(),
@@ -83,6 +89,16 @@ public class RestaurantController {
         DataRes res = new DataRes();
         res.setData(page.getContent());
         res.setPagination(new Pagination(page.getPageable().getPageNumber(), page.getSize(), page.getTotalElements()));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllRestaurants() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<RestaurantDTO> restaurants = restaurantService.getAllRestaurants(pageable);
+        DataRes res = new DataRes();
+        res.setData(restaurants.getContent());
+        res.setPagination(new Pagination(restaurants.getPageable().getPageNumber(), restaurants.getSize(), restaurants.getTotalElements()));
         return ResponseEntity.ok(res);
     }
 }

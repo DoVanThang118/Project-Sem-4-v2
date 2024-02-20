@@ -19,6 +19,8 @@ import java.util.Set;
 @Setter
 public class UserReq {
 
+    private Long id;
+
     @NotNull(message = "Name is required")
     @NotEmpty(message = "Name is required")
     private String name;

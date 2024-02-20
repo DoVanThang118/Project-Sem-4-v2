@@ -12,7 +12,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Product findByName(String name);
     @Query(value = "select p from Product p join p.category c " +
-            "where (:name is null or p.name like %:name%) " +
+            "WHERE (:id is null OR p.id in (:id)) " +
+            "and (:name is null or p.name like %:name%) " +
             "and (:description is null or p.description like %:description%) " +
             "and (:price is null or p.price in (:price)) " +
             "and (:status is null or p.status in (:status)) " +
@@ -20,5 +21,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (:rate is null or p.rate in (:rate)) " +
             "and (:category is null or c.name like %:category%) "
     )
-    Page<Product> findProducts(Pageable pageable, String name, String description, Double price, Integer status, String type, Integer rate, String category);
+    Page<Product> findProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, String category);
 }

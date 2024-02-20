@@ -30,7 +30,6 @@ public class GifController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("")
     public ResponseEntity<LinkedHashMap<String, Object>> uploadGif(@RequestParam("gifFile") MultipartFile gifFile, Authentication authentication, @RequestParam("title") String title) throws IOException {
         User user = userService.findByEmail(authentication.getName());

@@ -12,11 +12,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     Restaurant findByName(String name);
 
     @Query(value = "select r from Restaurant r " +
-            "where (:name is null or r.name like %:name%) " +
+            "WHERE (:id is null OR r.id in (:id)) " +
+            "and (:name is null or r.name like %:name%) " +
             "and (:description is null or r.description like %:description%) " +
             "and (:tel is null or r.tel like %:tel%) " +
             "and (:address is null or r.address like %:address%) " +
             "and (:status is null or r.status in (:status)) "
     )
-    Page<Restaurant> findRestaurants(Pageable pageable, String name, String description, String tel, String address, Integer status);
+    Page<Restaurant> findRestaurants(Pageable pageable, Long id, String name, String description, String tel, String address, Integer status);
 }

@@ -1,10 +1,8 @@
 package com.example.project_sem_4.service.impl;
 
-import com.example.project_sem_4.entity.Cart;
-import com.example.project_sem_4.entity.OrderDetail;
-import com.example.project_sem_4.entity.Product;
-import com.example.project_sem_4.entity.User;
+import com.example.project_sem_4.entity.*;
 import com.example.project_sem_4.model.dto.OrderDetailDTO;
+import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.OrderDetailMapper;
 import com.example.project_sem_4.model.req.OrderDetailReq;
 import com.example.project_sem_4.repository.CartRepository;
@@ -66,8 +64,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public Page<OrderDetailDTO> getOrderDetails(Pageable pageable, Integer status) {
-        Page<OrderDetail> orderDetails = oderDetailRepository.findOrderDetails(pageable, status);
+    public Page<OrderDetailDTO> getOrderDetails(Pageable pageable, Long id, Integer status) {
+        Page<OrderDetail> orderDetails = oderDetailRepository.findOrderDetails(pageable, id, status);
         return orderDetails.map(OrderDetailMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -82,5 +80,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete Cart");
         }
+    }
+
+    @Override
+    public Page<OrderDetailDTO> getAllOrderDetails(Pageable pageable) {
+        Page<OrderDetail> orderDetails = oderDetailRepository.findAll(pageable);
+        return orderDetails.map(OrderDetailMapper.INSTANCE::mapEntityToDTO);
     }
 }

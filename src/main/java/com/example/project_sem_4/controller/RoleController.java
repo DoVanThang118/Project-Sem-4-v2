@@ -1,5 +1,6 @@
 package com.example.project_sem_4.controller;
 
+import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.RoleDTO;
 import com.example.project_sem_4.model.req.RoleReq;
 import com.example.project_sem_4.model.res.DataRes;
@@ -28,10 +29,11 @@ public class RoleController {
 
     @PostMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<DataRes> getRole(@RequestBody RoleReq req) {
+    public ResponseEntity<DataRes> getRoles(@RequestBody RoleReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<RoleDTO> page = roleService.getRole(
                 pageable,
+                req.getId(),
                 req.getName(),
                 req.getDescription(),
                 req.getStatus()
@@ -39,6 +41,17 @@ public class RoleController {
         DataRes res = new DataRes();
         res.setData(page.getContent());
         res.setPagination(new Pagination(page.getPageable().getPageNumber(), page.getSize(), page.getTotalElements()));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllRoles() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<RoleDTO> roles = roleService.getAllRoles(pageable);
+        DataRes res = new DataRes();
+        res.setData(roles.getContent());
+        res.setPagination(new Pagination(roles.getPageable().getPageNumber(), roles.getSize(), roles.getTotalElements()));
         return ResponseEntity.ok(res);
     }
 

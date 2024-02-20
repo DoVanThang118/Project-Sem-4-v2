@@ -16,8 +16,9 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 //    @Query(value = "select c from Cart c " +
 //            "where (coalesce(:status, null) is null or c.status in (:status)) ")
     @Query(value = "select c from Cart c " +
-            "where (:status is null or c.status in (:status)) ")
-    Page<Cart> findCarts(Pageable pageable, Integer status);
+            "WHERE (:id is null OR c.id in (:id)) " +
+            "and (:status is null or c.status in (:status)) ")
+    Page<Cart> findCarts(Pageable pageable, Long id, Integer status);
 
     List<Cart> findByUser(User user);
 }

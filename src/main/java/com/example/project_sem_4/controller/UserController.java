@@ -83,21 +83,13 @@ public class UserController {
 
     @GetMapping("/api/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getUser() {
-        List<UserDTO> users = userService.getUser();
-        return ResponseEntity.ok(users);
-    }
-
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<?> findId(@PathVariable Long id) {
-        UserDTO result = userService.findId(id);
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/api/users/search")
-    public ResponseEntity<?> searchUser(@RequestParam(value = "keyword", required = false, defaultValue = "") String name) {
-        List<UserDTO> users = userService.searchUser(name);
-        return ResponseEntity.ok(users);
+    public ResponseEntity<?> getAllUsers() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<UserDTO> users = userService.getAllUsers(pageable);
+        DataRes res = new DataRes();
+        res.setData(users.getContent());
+        res.setPagination(new Pagination(users.getPageable().getPageNumber(), users.getSize(), users.getTotalElements()));
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/api/users/list")
@@ -106,6 +98,7 @@ public class UserController {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<UserDTO> page = userService.getUsers(
                 pageable,
+                req.getId(),
                 req.getName(),
                 req.getEmail(),
                 req.getTel(),
@@ -127,6 +120,7 @@ public class UserController {
     }
 
     @DeleteMapping("/api/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("Delete Success");

@@ -30,34 +30,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getUser() {
-        List<User> users = userRepository.findAll();
-        List<UserDTO> result = new ArrayList<>();
-        for (User user : users) {
-            result.add(UserMapper.userDto(user));
-        }
-        return result;
-    }
-
-    @Override
-    public UserDTO findId(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new RuntimeException("Not Found In System");
-        }
-        return UserMapper.userDto(user.get());
-    }
-
-    @Override
-    public List<UserDTO> searchUser(String keyword) {
-        List<User> users = userRepository.findAll();
-        List<UserDTO> result = new ArrayList<>();
-        for (User user : users) {
-            if (user.getName().contains(keyword)) {
-                result.add(UserMapper.userDto(user));
-            }
-        }
-        return result;
+    public Page<UserDTO> getAllUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(UserPageMapper.INSTANCE::mapEntityToDTO);
     }
 
     @Override
@@ -125,9 +100,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> getUsers(Pageable pageable, String name, String email, String tel, String address, Date birthday, String type, Integer status) {
-        Page<User> users = userRepository.findUsers(pageable, name, email, tel ,address, birthday, type, status);
+    public Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, Date birthday, String type, Integer status) {
+        Page<User> users = userRepository.findUsers(pageable, id, name, email, tel ,address, birthday, type, status);
         return users.map(UserPageMapper.INSTANCE::mapEntityToDTO);
     }
-
 }

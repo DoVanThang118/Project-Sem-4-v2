@@ -1,8 +1,10 @@
 package com.example.project_sem_4.service.impl;
 
 import com.example.project_sem_4.entity.Category;
+import com.example.project_sem_4.entity.Product;
 import com.example.project_sem_4.model.dto.CategoryDTO;
 import com.example.project_sem_4.model.mapper.CategoryMapper;
+import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.CategoryReq;
 import com.example.project_sem_4.repository.CategoryRepository;
 import com.example.project_sem_4.service.CategoryService;
@@ -36,8 +38,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoryDTO> getCategories(Pageable pageable, String name, String description, Integer status) {
-        Page<Category> categories = categoryRepository.findCategories(pageable, name, description, status);
+    public Page<CategoryDTO> getCategories(Pageable pageable, Long id, String name, String description, Integer status) {
+        Page<Category> categories = categoryRepository.findCategories(pageable, id, name, description, status);
         return categories.map(CategoryMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -52,5 +54,11 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete Category");
         }
+    }
+
+    @Override
+    public Page<CategoryDTO> getAllCategories(Pageable pageable) {
+        Page<Category> categories = categoryRepository.findAll(pageable);
+        return categories.map(CategoryMapper.INSTANCE::mapEntityToDTO);
     }
 }

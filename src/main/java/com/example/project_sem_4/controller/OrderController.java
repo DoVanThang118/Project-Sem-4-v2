@@ -1,6 +1,7 @@
 package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.User;
+import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.model.res.DataRes;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,11 +55,22 @@ public class OrderController {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<OrderDTO> page = orderService.getOrders(
                 pageable,
+                req.getId(),
                 req.getStatus()
         );
         DataRes res = new DataRes();
         res.setData(page.getContent());
         res.setPagination(new Pagination(page.getPageable().getPageNumber(), page.getSize(), page.getTotalElements()));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllOrders() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<OrderDTO> orders = orderService.getAllOrders(pageable);
+        DataRes res = new DataRes();
+        res.setData(orders.getContent());
+        res.setPagination(new Pagination(orders.getPageable().getPageNumber(), orders.getSize(), orders.getTotalElements()));
         return ResponseEntity.ok(res);
     }
 }

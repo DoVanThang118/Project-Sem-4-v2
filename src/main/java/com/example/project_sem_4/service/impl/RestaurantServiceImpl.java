@@ -3,6 +3,7 @@ package com.example.project_sem_4.service.impl;
 import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
+import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.RestaurantMapper;
 import com.example.project_sem_4.model.req.RestaurantReq;
 import com.example.project_sem_4.repository.BrandRepository;
@@ -46,8 +47,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Page<RestaurantDTO> getRestaurant(Pageable pageable, String name, String description, String tel, String address, Integer status) {
-        Page<Restaurant> restaurants = restaurantRepository.findRestaurants(pageable, name, description, tel, address, status);
+    public Page<RestaurantDTO> getRestaurant(Pageable pageable, Long id, String name, String description, String tel, String address, Integer status) {
+        Page<Restaurant> restaurants = restaurantRepository.findRestaurants(pageable, id, name, description, tel, address, status);
         return restaurants.map(RestaurantMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -62,5 +63,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete Restaurant");
         }
+    }
+
+    @Override
+    public Page<RestaurantDTO> getAllRestaurants(Pageable pageable) {
+        Page<Restaurant> restaurants = restaurantRepository.findAll(pageable);
+        return restaurants.map(RestaurantMapper.INSTANCE::mapEntityToDTO);
     }
 }

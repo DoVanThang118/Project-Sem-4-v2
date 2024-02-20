@@ -1,9 +1,11 @@
 package com.example.project_sem_4.service.impl;
 
+import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Order;
 import com.example.project_sem_4.entity.OrderDetail;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.OrderDTO;
+import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.OrderMapper;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.repository.OrderDetailRepository;
@@ -58,8 +60,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDTO> getOrders(Pageable pageable, Integer status) {
-        Page<Order> orders = orderRepository.findOrders(pageable, status);
+    public Page<OrderDTO> getOrders(Pageable pageable, Long id, Integer status) {
+        Page<Order> orders = orderRepository.findOrders(pageable, id, status);
         return orders.map(OrderMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -74,5 +76,11 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete order");
         }
+    }
+
+    @Override
+    public Page<OrderDTO> getAllOrders(Pageable pageable) {
+        Page<Order> orders = orderRepository.findAll(pageable);
+        return orders.map(OrderMapper.INSTANCE::mapEntityToDTO);
     }
 }

@@ -12,9 +12,10 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     Role findByName(String name);
 
     @Query(value = "select r from Role r " +
-            "where (:name is null or r.name like %:name%) " +
+            "WHERE (:id is null OR r.id in (:id)) " +
+            "and (:name is null or r.name like %:name%) " +
             "and (:description is null or r.description like %:description%)" +
             "and (:status is null or r.status in (:status))"
     )
-    Page<Role> findRoles(Pageable pageable, String name, String description, Integer status);
+    Page<Role> findRoles(Pageable pageable, Long id, String name, String description, Integer status);
 }

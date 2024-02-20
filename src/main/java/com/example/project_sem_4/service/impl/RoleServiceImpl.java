@@ -1,7 +1,9 @@
 package com.example.project_sem_4.service.impl;
 
+import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Role;
 import com.example.project_sem_4.model.dto.RoleDTO;
+import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.mapper.RoleMapper;
 import com.example.project_sem_4.model.req.RoleReq;
@@ -20,8 +22,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public Page<RoleDTO> getRole(Pageable pageable, String name, String description, Integer status) {
-        Page<Role> roles = roleRepository.findRoles(pageable, name, description, status);
+    public Page<RoleDTO> getRole(Pageable pageable, Long id, String name, String description, Integer status) {
+        Page<Role> roles = roleRepository.findRoles(pageable, id, name, description, status);
         return roles.map(RoleMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -49,5 +51,9 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
-
+    @Override
+    public Page<RoleDTO> getAllRoles(Pageable pageable) {
+        Page<Role> roles = roleRepository.findAll(pageable);
+        return roles.map(RoleMapper.INSTANCE::mapEntityToDTO);
+    }
 }

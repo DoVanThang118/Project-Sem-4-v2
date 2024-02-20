@@ -2,6 +2,7 @@ package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.CartDTO;
+import com.example.project_sem_4.model.dto.ProductDTO;
 import com.example.project_sem_4.model.req.CartReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,11 +55,22 @@ public class CartController {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<CartDTO> page = cartService.getCart(
                 pageable,
+                req.getId(),
                 req.getStatus()
         );
         DataRes res = new DataRes();
         res.setData(page.getContent());
         res.setPagination(new Pagination(page.getPageable().getPageNumber(), page.getSize(), page.getTotalElements()));
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllProducts() {
+        Pageable pageable = PageRequest.of(0,20);
+        Page<CartDTO> carts = cartService.getAllCarts(pageable);
+        DataRes res = new DataRes();
+        res.setData(carts.getContent());
+        res.setPagination(new Pagination(carts.getPageable().getPageNumber(), carts.getSize(), carts.getTotalElements()));
         return ResponseEntity.ok(res);
     }
 }

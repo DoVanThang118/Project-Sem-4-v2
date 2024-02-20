@@ -5,6 +5,7 @@ import com.example.project_sem_4.entity.Product;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.CartDTO;
 import com.example.project_sem_4.model.mapper.CartMapper;
+import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.CartReq;
 import com.example.project_sem_4.repository.CartRepository;
 import com.example.project_sem_4.repository.ProductRepository;
@@ -43,8 +44,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Page<CartDTO> getCart(Pageable pageable, Integer status) {
-        Page<Cart> carts = cartRepository.findCarts(pageable, status);
+    public Page<CartDTO> getCart(Pageable pageable, Long id, Integer status) {
+        Page<Cart> carts = cartRepository.findCarts(pageable, id, status);
         return carts.map(CartMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -59,5 +60,11 @@ public class CartServiceImpl implements CartService {
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete Cart");
         }
+    }
+
+    @Override
+    public Page<CartDTO> getAllCarts(Pageable pageable) {
+        Page<Cart> carts = cartRepository.findAll(pageable);
+        return carts.map(CartMapper.INSTANCE::mapEntityToDTO);
     }
 }
