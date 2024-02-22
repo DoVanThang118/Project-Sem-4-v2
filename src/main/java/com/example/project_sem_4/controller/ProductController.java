@@ -76,7 +76,7 @@ public class ProductController {
     }
 
     @PostMapping("/List")
-    public ResponseEntity<?> getProducts(@RequestBody ProductReq req) {
+    public ResponseEntity<?> getProducts(@ModelAttribute ProductReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<ProductDTO> page = productService.getProducts(
                 pageable,
