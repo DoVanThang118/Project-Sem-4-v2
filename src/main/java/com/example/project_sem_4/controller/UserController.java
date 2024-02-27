@@ -54,9 +54,9 @@ public class UserController {
         UserDTO result = userService.createUser(req);
         if (result == null) return new ResponseEntity<>("User is not created, try again later", HttpStatus.BAD_REQUEST);
         // Gửi mail đến user khi tạo tài khoản thành công
-        String subject = "Tài khoản của bạn đã được tạo";
-        String body = "Chào " + req.getName() + ", tài khoản của bạn đã được tạo thành công.";
-        mailService.sendMailUser(fromEmail, req.getEmail(), subject, body);
+//        String subject = "Tài khoản của bạn đã được tạo";
+//        String body = "Chào " + req.getName() + ", tài khoản của bạn đã được tạo thành công.";
+//        mailService.sendMailUser(fromEmail, req.getEmail(), subject, body);
         //
         return ResponseEntity.ok(result);
     }

@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (:status is null or p.status in (:status)) " +
             "and (:type is null or p.type like %:type%) " +
             "and (:rate is null or p.rate in (:rate)) " +
-            "and (:category is null or c.name like %:category%) "
+            "and (:categoryId is null or c.id in (:categoryId)) "
     )
-    Page<Product> findProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, String category);
+    Page<Product> findProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long categoryId);
 }

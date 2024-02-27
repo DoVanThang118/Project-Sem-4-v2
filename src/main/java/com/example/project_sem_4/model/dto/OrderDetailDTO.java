@@ -2,6 +2,7 @@ package com.example.project_sem_4.model.dto;
 
 import com.example.project_sem_4.entity.Cart;
 import com.example.project_sem_4.entity.Order;
+import com.example.project_sem_4.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class OrderDetailDTO {
 
     private Integer status;
 
-    private Order order;
+    private OrderDTO order;
 
-    private Cart cart;
+    private CartDTO cart;
 }

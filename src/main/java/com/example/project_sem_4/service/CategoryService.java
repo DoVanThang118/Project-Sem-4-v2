@@ -7,10 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 public interface CategoryService {
 
-    CategoryDTO createCategory(CategoryReq req);
+    CategoryDTO createCategory(CategoryReq req) throws IOException;
 
     Page<CategoryDTO> getCategories(Pageable pageable, Long id, String name, String description, Integer status);
 

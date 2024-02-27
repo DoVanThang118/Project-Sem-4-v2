@@ -1,19 +1,26 @@
 package com.example.project_sem_4.service.impl;
 
+import com.cloudinary.Cloudinary;
 import com.example.project_sem_4.entity.Brand;
+import com.example.project_sem_4.entity.Image;
 import com.example.project_sem_4.entity.Product;
+import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.model.dto.ProductDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.ProductReq;
+import com.example.project_sem_4.repository.ImageRepository;
 import com.example.project_sem_4.repository.ProductRepository;
+import com.example.project_sem_4.repository.RestaurantRepository;
 import com.example.project_sem_4.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -21,8 +28,17 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
+
     @Override
-    public ProductDTO createProduct(ProductReq req) {
+    public ProductDTO createProduct(ProductReq req) throws IOException {
         if (req == null) {
             throw new RuntimeException("NullPointerException");
         }
@@ -32,14 +48,42 @@ public class ProductServiceImpl implements ProductService {
                 throw new RuntimeException("Product is already in use");
             }
         }
+        if (req.getRestaurantId() != null) {
+            Optional<Restaurant> restaurant = restaurantRepository.findById(req.getRestaurantId());
+            restaurant.ifPresent(req::setRestaurant);
+        }
+
+        if (req.getCategoryId() == null) {
+            throw new RuntimeException("Please select a category");
+        }
+
+        if (req.getStatus() == null) {
+            req.setStatus(1);
+        }
+
+        if (req.getImg() != null) {
+            Set<Image> files = new HashSet<>();
+            for (MultipartFile file : req.getImg()) {
+                Image imageReq = new Image();
+                String url = cloudinary.uploader().upload(
+                                file.getBytes(),
+                                Map.of("public_id", UUID.randomUUID().toString()))
+                        .get("url").toString();
+                imageReq.setUrl(url);
+                imageReq.setStatus(1);
+                imageRepository.save(imageReq);
+                files.add(imageReq);
+            }
+            req.setImages(files);
+        }
         Product product = ProductMapper.INSTANCE.mapReqToEntity(req);
         productRepository.save(product);
         return ProductMapper.INSTANCE.mapEntityToDTO(product);
     }
 
     @Override
-    public Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, String category) {
-        Page<Product> products = productRepository.findProducts(pageable, id, name, description, price, status, type, rate, category);
+    public Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long categoryId) {
+        Page<Product> products = productRepository.findProducts(pageable, id, name, description, price, status, type, rate, categoryId);
         return products.map(ProductMapper.INSTANCE::mapEntityToDTO);
     }
 

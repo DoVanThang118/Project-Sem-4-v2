@@ -50,13 +50,25 @@ public class CartController {
         return ResponseEntity.ok("Delete Success");
     }
 
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteAllCart(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        cartService.deleteAllCart(user.getId());
+        return ResponseEntity.ok("Delete Success");
+    }
+
     @PostMapping("/list")
-    public ResponseEntity<?> getCart(@RequestBody CartReq req) {
+    public ResponseEntity<?> getCart(@RequestBody CartReq req, Authentication authentication) {
+
+        User user = userService.findByEmail(authentication.getName());
+        req.setUserId(user.getId());
+
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
-        Page<CartDTO> page = cartService.getCart(
+        Page<CartDTO> page = cartService.findCarts(
                 pageable,
                 req.getId(),
-                req.getStatus()
+                req.getStatus(),
+                req.getUserId()
         );
         DataRes res = new DataRes();
         res.setData(page.getContent());
@@ -65,9 +77,12 @@ public class CartController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllProducts() {
+    public ResponseEntity<?> getAllProducts(Authentication authentication) {
+
+        User user = userService.findByEmail(authentication.getName());
+
         Pageable pageable = PageRequest.of(0,20);
-        Page<CartDTO> carts = cartService.getAllCarts(pageable);
+        Page<CartDTO> carts = cartService.getCarts(pageable, user.getId());
         DataRes res = new DataRes();
         res.setData(carts.getContent());
         res.setPagination(new Pagination(carts.getPageable().getPageNumber(), carts.getSize(), carts.getTotalElements()));

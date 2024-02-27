@@ -1,7 +1,7 @@
 package com.example.project_sem_4.model.req;
 
 import com.example.project_sem_4.entity.Cart;
-import com.example.project_sem_4.entity.Gif;
+import com.example.project_sem_4.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,7 +57,7 @@ public class UserReq {
 
     private Set<Role> roles;
 
-    private List<Gif> gifs;
+    private Set<Image> images;
 
     private int pageNumber = 0;
 

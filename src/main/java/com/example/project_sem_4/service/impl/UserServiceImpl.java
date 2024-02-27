@@ -44,6 +44,9 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             throw new RuntimeException("Email is already in use");
         }
+        if (req.getType() == null) {
+            req.setType("user");
+        }
         Role role = roleRepository.findByName("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
@@ -65,8 +68,8 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
             throw new RuntimeException("Not Found User");
         }
-
-        User update = UserMapper.toUser(req, id);
+        req.setId(id);
+        User update = UserMapper.toUser(req);
         try {
             userRepository.save(update);
         } catch (Exception e) {

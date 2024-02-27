@@ -44,11 +44,6 @@ public class Order {
     )
     private Set<User> users;
 
-//    public void addUser(User user) {
-//        this.users.add(user);
-//    }
-
-
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,

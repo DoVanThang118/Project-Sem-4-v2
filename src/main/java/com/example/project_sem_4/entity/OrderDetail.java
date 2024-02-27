@@ -25,15 +25,11 @@ public class OrderDetail {
 
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private User user;
 }

@@ -1,12 +1,12 @@
 package com.example.project_sem_4.model.dto;
 
-import com.example.project_sem_4.entity.Gif;
-import com.example.project_sem_4.entity.Restaurant;
+import com.example.project_sem_4.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +22,5 @@ public class BrandDTO {
 
     private String email;
 
-    private List<Restaurant> restaurants;
-
-    private List<Gif> gifs;
+    private Set<ImageDTO> images;
 }

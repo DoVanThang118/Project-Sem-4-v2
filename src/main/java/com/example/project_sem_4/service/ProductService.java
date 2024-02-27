@@ -7,12 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 public interface ProductService {
 
-    ProductDTO createProduct(ProductReq req);
+    ProductDTO createProduct(ProductReq req) throws IOException;
 
-    Page<ProductDTO> getProducts(Pageable pageable , Long id, String name, String description, Double price, Integer status, String type, Integer rate, String category);
+    Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long categoryId);
 
     void deleteProduct(Long id);
 

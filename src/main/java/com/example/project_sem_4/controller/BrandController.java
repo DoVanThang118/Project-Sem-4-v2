@@ -1,15 +1,10 @@
 package com.example.project_sem_4.controller;
 
-import com.example.project_sem_4.entity.Gif;
 import com.example.project_sem_4.model.dto.BrandDTO;
-import com.example.project_sem_4.model.dto.UserDTO;
-import com.example.project_sem_4.model.mapper.BrandMapper;
-import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.BrandReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
 import com.example.project_sem_4.service.BrandService;
-import com.example.project_sem_4.service.GifService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/brands")
@@ -31,9 +25,6 @@ public class BrandController {
 
     @Autowired
     private BrandService brandService;
-
-    @Autowired
-    private GifService gifService;
 
     @PostMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
@@ -66,34 +57,16 @@ public class BrandController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> saveBrand(@ModelAttribute BrandReq req) {
-        List<Gif> files = new ArrayList<>();
+    public ResponseEntity<?> saveBrand(@ModelAttribute BrandReq req) throws IOException {
         BrandDTO create = brandService.saveBrand(req);
-        if (req.getImg() != null) {
-            for (MultipartFile file : req.getImg()) {
-                String url = gifService.uploadFile(file);
-                Gif gif = gifService.saveGifForBrand(url, BrandMapper.INSTANCE.mapDTOToEntity(create));
-                files.add(gif);
-            }
-            create.setGifs(files);
-        }
         return ResponseEntity.ok(create);
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateBrand(@ModelAttribute BrandReq req, @PathVariable Long id) {
+    public ResponseEntity<?> updateBrand(@ModelAttribute BrandReq req, @PathVariable Long id) throws IOException {
         req.setId(id);
         BrandDTO update = brandService.saveBrand(req);
-        List<Gif> files = new ArrayList<>();
-        if (req.getImg() != null) {
-            for (MultipartFile file : req.getImg()) {
-                String url = gifService.uploadFile(file);
-                Gif gif = gifService.saveGifForBrand(url, BrandMapper.INSTANCE.mapDTOToEntity(update));
-                files.add(gif);
-            }
-            update.setGifs(files);
-        }
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 

@@ -1,7 +1,7 @@
 package com.example.project_sem_4.model.dto;
 
 import com.example.project_sem_4.entity.Cart;
-import com.example.project_sem_4.entity.Gif;
+import com.example.project_sem_4.entity.Image;
 import com.example.project_sem_4.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class UserDTO {
     private Date birthday;
     private String type;
     private Integer status;
-    private List<Cart> carts;
-    private Set<Role> roles;
-    private List<Gif> gifs;
+//    private List<CartDTO> carts;
+    private Set<RoleDTO> roles;
+    private Set<ImageDTO> images;
 }

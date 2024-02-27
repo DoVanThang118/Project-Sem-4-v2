@@ -31,18 +31,14 @@ public class Feedback {
 
     private Integer status;
 
-    @OneToMany(
-            mappedBy = "feedback",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "feedbacks_images",
+            joinColumns = @JoinColumn(name = "feedback_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
     )
-    @JsonIgnore
-    private List<Gif> gifs = new ArrayList<>();
+    private Set<Image> images;
 
-    public void addGif(Gif gif) {
-        gifs.add(gif);
-        gif.setFeedback(this);
-    }
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(

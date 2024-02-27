@@ -3,9 +3,11 @@ package com.example.project_sem_4.controller;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.OrderDTO;
+import com.example.project_sem_4.model.req.CartReq;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
+import com.example.project_sem_4.service.CartService;
 import com.example.project_sem_4.service.OrderService;
 import com.example.project_sem_4.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,9 +30,13 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+    private CartService cartService;
+
+    @Autowired
     private UserService userService;
 
     @PostMapping("/create")
+    @Transactional
     public ResponseEntity<?> createOrder(@RequestBody OrderReq req, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         OrderDTO create = orderService.saveOrder(req, user);

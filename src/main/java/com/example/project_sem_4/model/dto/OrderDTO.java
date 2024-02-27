@@ -27,7 +27,5 @@ public class OrderDTO {
 
     private String phone;
 
-    private Set<User> users = new HashSet<>();
-
-    private List<Cart> carts = new ArrayList<>();
+    private Set<UserDTO> users;
 }

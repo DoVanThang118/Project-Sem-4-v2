@@ -1,6 +1,7 @@
 package com.example.project_sem_4.service.impl;
 
 import com.example.project_sem_4.entity.Cart;
+import com.example.project_sem_4.entity.Image;
 import com.example.project_sem_4.entity.Product;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.CartDTO;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,19 +36,28 @@ public class CartServiceImpl implements CartService {
         }
         if (req.getProductId() != null) {
             Optional<Product> product = productRepository.findById(req.getProductId());
-            product.ifPresent(req::setProduct);
+            if (product.isPresent()) {
+                req.setProduct(product.get());
+            } else {
+                throw new RuntimeException("Not found product");
+            }
         }
-
+        if (req.getStatus() == null) {
+            req.setStatus(1);
+        }
         Cart cart = CartMapper.INSTANCE.mapReqToEntity(req);
-        cart.setUser(user);
-        user.addCart(cart);
+        List<Cart> cartList = new ArrayList<>();
+        cartList.add(cart);
+        for (Cart c : cartList) {
+            c.setUser(user);
+        }
         cartRepository.save(cart);
         return CartMapper.INSTANCE.mapEntityToDTO(cart);
     }
 
     @Override
-    public Page<CartDTO> getCart(Pageable pageable, Long id, Integer status) {
-        Page<Cart> carts = cartRepository.findCarts(pageable, id, status);
+    public Page<CartDTO> findCarts(Pageable pageable, Long id, Integer status, Long userId) {
+        Page<Cart> carts = cartRepository.findCarts(pageable, id, status, userId);
         return carts.map(CartMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -63,8 +75,17 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Page<CartDTO> getAllCarts(Pageable pageable) {
-        Page<Cart> carts = cartRepository.findAll(pageable);
+    public void deleteAllCart(Long userId) {
+        try {
+            cartRepository.deleteAllByUserId(userId);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public Page<CartDTO> getCarts(Pageable pageable, Long userId) {
+        Page<Cart> carts = cartRepository.getCarts(pageable, userId);
         return carts.map(CartMapper.INSTANCE::mapEntityToDTO);
     }
 }

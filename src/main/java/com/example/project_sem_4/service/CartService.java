@@ -13,9 +13,11 @@ public interface CartService {
 
     CartDTO saveCart (CartReq req, User user);
 
-    Page<CartDTO> getCart(Pageable pageable, Long id, Integer status);
+    Page<CartDTO> findCarts(Pageable pageable, Long id, Integer status, Long userId);
 
     void deleteCart(Long id);
 
-    Page<CartDTO> getAllCarts(Pageable pageable);
+    void deleteAllCart(Long userId);
+
+    Page<CartDTO> getCarts(Pageable pageable, Long userId);
 }

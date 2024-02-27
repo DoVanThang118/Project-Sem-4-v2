@@ -1,6 +1,7 @@
 package com.example.project_sem_4.model.dto;
 
 import com.example.project_sem_4.entity.Product;
+import com.example.project_sem_4.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,7 @@ public class CartDTO {
 
     private Integer status;
 
-    private Product product;
+    private ProductDTO product;
+
+    private UserDTO user;
 }

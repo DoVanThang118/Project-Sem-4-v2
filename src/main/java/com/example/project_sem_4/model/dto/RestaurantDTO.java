@@ -1,16 +1,14 @@
 package com.example.project_sem_4.model.dto;
 
 import com.example.project_sem_4.entity.Brand;
-import com.example.project_sem_4.entity.Gif;
-import com.example.project_sem_4.entity.Product;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.project_sem_4.entity.Image;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RestaurantDTO {
@@ -27,9 +25,7 @@ public class RestaurantDTO {
 
     private Integer status;
 
-    private Brand brand;
+    private BrandDTO brand;
 
-    private List<Product> products = new ArrayList<>();
-
-    private List<Gif> gifs = new ArrayList<>();
+    private Set<ImageDTO> images;
 }

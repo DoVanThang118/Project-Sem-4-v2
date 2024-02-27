@@ -28,10 +28,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public List<OrderDetailDTO> create(User user) {
+
         List<Cart> carts = cartRepository.findByUser(user);
         if (carts == null) {
             throw new RuntimeException("Cart null");
         }
+
         List<OrderDetail> item = new ArrayList<>();
 
         List<OrderDetailDTO> itemDTO = new ArrayList<>();
@@ -51,9 +53,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
             OrderDetail orderDetail = OrderDetailMapper.INSTANCE.mapReqToEntity(req);
 
-            user.addOrderDetail(orderDetail);
+//            user.addOrderDetail(orderDetail);
 
             item.add(orderDetail);
+            oderDetailRepository.save(orderDetail);
         }
 
         for (OrderDetail orderDetail : item) {

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -34,16 +35,11 @@ public class Category {
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "category",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "categoris_images",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
     )
-    @JsonIgnore
-    private List<Gif> gifs = new ArrayList<>();
-
-    public void addGif(Gif gif) {
-        gifs.add(gif);
-        gif.setCategory(this);
-    }
+    private Set<Image> images;
 }

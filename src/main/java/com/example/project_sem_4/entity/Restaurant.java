@@ -2,12 +2,11 @@ package com.example.project_sem_4.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -30,28 +29,15 @@ public class Restaurant {
 
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brand_id", referencedColumnName = "id")
     private Brand brand;
 
-    @OneToMany(
-            mappedBy = "restaurant",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "restaurants_images",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
     )
-    @JsonIgnore
-    private List<Product> products = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "restaurant",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JsonIgnore
-    private List<Gif> gifs = new ArrayList<>();
-
-    public void addGif(Gif gif) {
-        gifs.add(gif);
-        gif.setRestaurant(this);
-    }
+    private Set<Image> images;
 }

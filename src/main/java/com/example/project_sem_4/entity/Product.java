@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -23,29 +24,31 @@ public class Product {
     private String name;
 
     private String description;
+
     private Double price;
+
     private Integer qty;
+
     private Integer rate;
+
     private String type;
+
     private Integer status;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 
-    @OneToMany(
-            mappedBy = "product",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "products_images",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
     )
-    @JsonIgnore
-    private List<Gif> gifs = new ArrayList<>();
+    private Set<Image> images;
 
-    public void addGif(Gif gif) {
-        gifs.add(gif);
-        gif.setProduct(this);
-    }
 }

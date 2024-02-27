@@ -1,14 +1,9 @@
 package com.example.project_sem_4.controller;
 
-import com.example.project_sem_4.entity.Gif;
-import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.ProductDTO;
-import com.example.project_sem_4.model.mapper.CategoryMapper;
-import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.ProductReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
-import com.example.project_sem_4.service.GifService;
 import com.example.project_sem_4.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/products")
@@ -32,39 +25,18 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private GifService gifService;
-
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> saveProduct(@ModelAttribute ProductReq req) {
-        List<Gif> files = new ArrayList<>();
+    public ResponseEntity<?> saveProduct(@ModelAttribute ProductReq req) throws IOException {
         ProductDTO create = productService.createProduct(req);
-        if (req.getImg() != null) {
-            for (MultipartFile file : req.getImg()) {
-                String url = gifService.uploadFile(file);
-                Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(create));
-                files.add(gif);
-            }
-            create.setGifs(files);
-        }
         return ResponseEntity.ok(create);
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateProduct(@ModelAttribute ProductReq req, @PathVariable Long id) {
+    public ResponseEntity<?> updateProduct(@ModelAttribute ProductReq req, @PathVariable Long id) throws IOException {
         req.setId(id);
         ProductDTO update = productService.createProduct(req);
-        List<Gif> files = new ArrayList<>();
-        if (req.getImg() != null) {
-            for (MultipartFile file : req.getImg()) {
-                String url = gifService.uploadFile(file);
-                Gif gif = gifService.saveGifForProduct(url, ProductMapper.INSTANCE.mapDTOToEntity(update));
-                files.add(gif);
-            }
-            update.setGifs(files);
-        }
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 
@@ -75,7 +47,7 @@ public class ProductController {
         return ResponseEntity.ok("Delete Success");
     }
 
-    @PostMapping("/List")
+    @PostMapping("/list")
     public ResponseEntity<?> getProducts(@ModelAttribute ProductReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<ProductDTO> page = productService.getProducts(
@@ -87,7 +59,7 @@ public class ProductController {
                 req.getStatus(),
                 req.getType(),
                 req.getRate(),
-                req.getNameCategory()
+                req.getCategoryId()
         );
         DataRes res = new DataRes();
         res.setData(page.getContent());

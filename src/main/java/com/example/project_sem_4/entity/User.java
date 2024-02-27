@@ -41,35 +41,6 @@ public class User {
 
     private Integer status;
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Cart> carts = new ArrayList<>() ;
-
-    public void addCart(Cart cart) {
-        carts.add(cart);
-        cart.setUser(this);
-    }
-
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<OrderDetail> orderDetails = new ArrayList<>() ;
-
-    public void addOrderDetail(OrderDetail orderDetail) {
-        orderDetails.add(orderDetail);
-        orderDetail.setUser(this);
-    }
-
-    public void deleteCart(Cart cart) {
-        carts.remove(cart);
-        cart.setUser(null);
-    }
-
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -78,22 +49,11 @@ public class User {
     )
     private Set<Role> roles;
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_images",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
     )
-    @JsonIgnore
-    private List<Gif> gifs = new ArrayList<>();
-
-    public void addGif(Gif gif){
-        gifs.add(gif);
-        gif.setUser(this);
-    }
-
-    public void deleteGif(Gif gif){
-        gifs.remove(gif);
-        gif.setUser(null);
-    }
-
+    private Set<Image> images;
 }

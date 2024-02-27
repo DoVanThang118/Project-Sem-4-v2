@@ -8,6 +8,7 @@ import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.OrderMapper;
 import com.example.project_sem_4.model.req.OrderReq;
+import com.example.project_sem_4.repository.CartRepository;
 import com.example.project_sem_4.repository.OrderDetailRepository;
 import com.example.project_sem_4.repository.OrderRepository;
 import com.example.project_sem_4.service.OrderService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -24,6 +26,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -44,9 +49,7 @@ public class OrderServiceImpl implements OrderService {
             req.setUsers(new HashSet<>());
         }
 //        Set<User> users = new HashSet<>();
-        if (!req.getUsers().contains(user)) {
-            req.getUsers().add(user);
-        }
+        req.getUsers().add(user);
 //        users.add(user);
 //        req.setUsers(users);
 //        req.setUsers(new HashSet<>(Collections.singletonList(user)));
@@ -54,7 +57,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = OrderMapper.INSTANCE.mapReqToEntity(req);
 //        order.addUser(user);
 
-        orderRepository.save(order);
+        try {
+            orderRepository.save(order);
+        } catch (Exception e) {
+            throw new RuntimeException("Error");
+        }
 
         return OrderMapper.INSTANCE.mapEntityToDTO(order);
     }

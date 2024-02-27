@@ -1,6 +1,7 @@
 package com.example.project_sem_4.model.req;
 
 import com.example.project_sem_4.entity.Product;
+import com.example.project_sem_4.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,8 @@ public class CartReq {
     private Long productId;
     private Product product;
     //
+    private Long userId;
+    private User user;
 
     private int pageNumber = 0;
 

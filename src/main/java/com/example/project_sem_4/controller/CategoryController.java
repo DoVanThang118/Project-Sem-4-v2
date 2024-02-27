@@ -1,15 +1,10 @@
 package com.example.project_sem_4.controller;
 
-import com.example.project_sem_4.entity.Gif;
 import com.example.project_sem_4.model.dto.CategoryDTO;
-import com.example.project_sem_4.model.dto.ProductDTO;
-import com.example.project_sem_4.model.mapper.BrandMapper;
-import com.example.project_sem_4.model.mapper.CategoryMapper;
 import com.example.project_sem_4.model.req.CategoryReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
 import com.example.project_sem_4.service.CategoryService;
-import com.example.project_sem_4.service.GifService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -32,39 +25,18 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private GifService gifService;
-
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> saveCategory(@ModelAttribute CategoryReq req) {
-        List<Gif> files = new ArrayList<>();
+    public ResponseEntity<?> saveCategory(@ModelAttribute CategoryReq req) throws IOException {
         CategoryDTO create = categoryService.createCategory(req);
-        if (req.getImg() != null) {
-            for (MultipartFile file : req.getImg()) {
-                String url = gifService.uploadFile(file);
-                Gif gif = gifService.saveGifForCategory(url, CategoryMapper.INSTANCE.mapDTOToEntity(create));
-                files.add(gif);
-            }
-            create.setGifs(files);
-        }
         return ResponseEntity.ok(create);
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateCategory(@ModelAttribute CategoryReq req, @PathVariable Long id) {
+    public ResponseEntity<?> updateCategory(@ModelAttribute CategoryReq req, @PathVariable Long id) throws IOException {
         req.setId(id);
         CategoryDTO update = categoryService.createCategory(req);
-        List<Gif> files = new ArrayList<>();
-        if (req.getImg() != null) {
-            for (MultipartFile file : req.getImg()) {
-                String url = gifService.uploadFile(file);
-                Gif gif = gifService.saveGifForCategory(url, CategoryMapper.INSTANCE.mapDTOToEntity(update));
-                files.add(gif);
-            }
-            update.setGifs(files);
-        }
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 
@@ -75,7 +47,7 @@ public class CategoryController {
         return ResponseEntity.ok("Delete Success");
     }
 
-    @PostMapping("/List")
+    @PostMapping("/list")
     public ResponseEntity<?> getCategories(@ModelAttribute CategoryReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<CategoryDTO> page = categoryService.getCategories(
