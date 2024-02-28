@@ -32,7 +32,7 @@ public class RestaurantController {
         return ResponseEntity.ok(create);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateRestaurant(@ModelAttribute RestaurantReq req, @PathVariable Long id) throws IOException {
         req.setId(id);

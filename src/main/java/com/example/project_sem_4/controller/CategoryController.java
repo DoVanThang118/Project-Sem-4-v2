@@ -32,7 +32,7 @@ public class CategoryController {
         return ResponseEntity.ok(create);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateCategory(@ModelAttribute CategoryReq req, @PathVariable Long id) throws IOException {
         req.setId(id);

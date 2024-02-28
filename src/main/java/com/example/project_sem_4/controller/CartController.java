@@ -36,7 +36,7 @@ public class CartController {
         return ResponseEntity.ok(create);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateCart(@RequestBody CartReq req, @PathVariable Long id, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         req.setId(id);

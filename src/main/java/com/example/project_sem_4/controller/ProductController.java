@@ -32,7 +32,7 @@ public class ProductController {
         return ResponseEntity.ok(create);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@ModelAttribute ProductReq req, @PathVariable Long id) throws IOException {
         req.setId(id);

@@ -43,7 +43,7 @@ public class OrderController {
         return ResponseEntity.ok(create);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateOrder(@RequestBody OrderReq req, @PathVariable Long id, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         req.setId(id);

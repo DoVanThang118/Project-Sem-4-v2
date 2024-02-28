@@ -62,7 +62,7 @@ public class RoleController {
         return new ResponseEntity<>(create, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateRole(@RequestBody RoleReq req, @PathVariable Long id) {
         req.setId(id);

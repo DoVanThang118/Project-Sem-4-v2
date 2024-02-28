@@ -62,7 +62,7 @@ public class BrandController {
         return ResponseEntity.ok(create);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateBrand(@ModelAttribute BrandReq req, @PathVariable Long id) throws IOException {
         req.setId(id);
