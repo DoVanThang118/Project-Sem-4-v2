@@ -29,7 +29,7 @@ public class Restaurant {
 
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "brand_id", referencedColumnName = "id")
     private Brand brand;
 

@@ -39,14 +39,6 @@ public class WebSecurityConfig  {
         return configuration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder, JwtUserDetailsService userDetailService) {
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setPasswordEncoder(passwordEncoder);
-//        authenticationProvider.setUserDetailsService(userDetailService);
-//        return new ProviderManager(authenticationProvider);
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)

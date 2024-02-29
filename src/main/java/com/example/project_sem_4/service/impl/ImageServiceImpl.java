@@ -25,17 +25,32 @@ public class ImageServiceImpl implements ImageService {
     private ImageRepository imageRepository;
 
 
+//    @Override
+//    public ImageDTO createImage(MultipartFile multipartFile) throws IOException {
+//        ImageReq req = new ImageReq();
+//        String url = cloudinary.uploader().upload(
+//                multipartFile.getBytes(),
+//                Map.of("public_id", UUID.randomUUID().toString()))
+//                .get("url").toString();
+//        req.setUrl(url);
+//        req.setStatus(1);
+//        Image image = ImageMapper.INSTANCE.mapReqToEntity(req);
+//        imageRepository.save(image);
+//        return ImageMapper.INSTANCE.mapEntityToDTO(image);
+//    }
+
     @Override
-    public ImageDTO createImage(MultipartFile multipartFile) throws IOException {
-        ImageReq req = new ImageReq();
+    public ImageDTO uploadImages(MultipartFile multipartFile) throws IOException {
+
+        Image image = new Image();
         String url = cloudinary.uploader().upload(
-                multipartFile.getBytes(),
-                Map.of("public_id", UUID.randomUUID().toString()))
+                        multipartFile.getBytes(),
+                        Map.of("public_id", UUID.randomUUID().toString()))
                 .get("url").toString();
-        req.setUrl(url);
-        req.setStatus(1);
-        Image image = ImageMapper.INSTANCE.mapReqToEntity(req);
+        image.setUrl(url);
+        image.setStatus(1);
         imageRepository.save(image);
+
         return ImageMapper.INSTANCE.mapEntityToDTO(image);
     }
 }

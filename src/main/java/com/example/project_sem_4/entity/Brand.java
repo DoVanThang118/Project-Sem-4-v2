@@ -29,14 +29,6 @@ public class Brand {
 
     private String email;
 
-//    @OneToMany(
-//            mappedBy = "brand",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    @JsonIgnore
-//    private List<Restaurant> restaurants = new ArrayList<>() ;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "brands_images",

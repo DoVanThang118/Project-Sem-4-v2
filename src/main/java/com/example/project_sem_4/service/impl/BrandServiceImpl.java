@@ -81,12 +81,9 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void deleteBrand(Long id) {
-        Optional<Brand> brand = brandRepository.findById(id);
-        if (brand.isEmpty()) {
-            throw new RuntimeException("Not found brand has id = " + id);
-        }
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found brand has id = " + id));
         try {
-            brandRepository.delete(brand.get());
+            brandRepository.delete(brand);
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete role");
         }

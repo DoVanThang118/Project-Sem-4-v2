@@ -1,14 +1,12 @@
 package com.example.project_sem_4.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.example.project_sem_4.entity.Brand;
-import com.example.project_sem_4.entity.Image;
-import com.example.project_sem_4.entity.Product;
-import com.example.project_sem_4.entity.Restaurant;
+import com.example.project_sem_4.entity.*;
 import com.example.project_sem_4.model.dto.ProductDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.ProductMapper;
 import com.example.project_sem_4.model.req.ProductReq;
+import com.example.project_sem_4.repository.CategoryRepository;
 import com.example.project_sem_4.repository.ImageRepository;
 import com.example.project_sem_4.repository.ProductRepository;
 import com.example.project_sem_4.repository.RestaurantRepository;
@@ -32,6 +30,9 @@ public class ProductServiceImpl implements ProductService {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private ImageRepository imageRepository;
 
     @Autowired
@@ -53,8 +54,9 @@ public class ProductServiceImpl implements ProductService {
             restaurant.ifPresent(req::setRestaurant);
         }
 
-        if (req.getCategoryId() == null) {
-            throw new RuntimeException("Please select a category");
+        if (req.getCategoryId() != null) {
+            Optional<Category> category = categoryRepository.findById(req.getCategoryId());
+            category.ifPresent(req::setCategory);
         }
 
         if (req.getStatus() == null) {
