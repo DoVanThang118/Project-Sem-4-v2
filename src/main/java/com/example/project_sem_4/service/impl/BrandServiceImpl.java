@@ -60,6 +60,7 @@ public class BrandServiceImpl implements BrandService {
             }
         }
         if (req.getImg() != null) {
+            req.setImages(new HashSet<>());
             Set<Image> files = new HashSet<>();
             for (MultipartFile file : req.getImg()) {
                 Image imageReq = new Image();
@@ -69,8 +70,8 @@ public class BrandServiceImpl implements BrandService {
                         .get("url").toString();
                 imageReq.setUrl(url);
                 imageReq.setStatus(1);
-                imageRepository.save(imageReq);
-                files.add(imageReq);
+                Image image = imageRepository.save(imageReq);
+                files.add(image);
             }
             req.setImages(files);
         }

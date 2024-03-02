@@ -29,7 +29,7 @@ public class Brand {
 
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "brands_images",
             joinColumns = @JoinColumn(name = "brand_id"),

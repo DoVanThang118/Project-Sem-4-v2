@@ -31,7 +31,7 @@ public class Feedback {
 
     private Integer status;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "feedbacks_images",
             joinColumns = @JoinColumn(name = "feedback_id"),
@@ -48,7 +48,7 @@ public class Feedback {
     )
     private Set<User> users;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "order_id")
     private Order order;
 }

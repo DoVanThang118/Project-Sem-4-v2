@@ -29,11 +29,11 @@ public class Restaurant {
 
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "brand_id", referencedColumnName = "id")
     private Brand brand;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "restaurants_images",
             joinColumns = @JoinColumn(name = "restaurant_id"),

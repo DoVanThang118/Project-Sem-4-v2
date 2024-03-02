@@ -46,7 +46,7 @@ public class Order {
 
     @OneToMany(
             mappedBy = "order",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.MERGE,
             orphanRemoval = true
     )
     @JsonIgnore

@@ -49,7 +49,7 @@ public class User {
     )
     private Set<Role> roles;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_images",
             joinColumns = @JoinColumn(name = "user_id"),

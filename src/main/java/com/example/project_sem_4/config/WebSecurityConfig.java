@@ -45,8 +45,8 @@ public class WebSecurityConfig  {
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers(HttpMethod.POST, "/register", "/authenticate").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-//                                .anyRequest().authenticated()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
+//                                .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
