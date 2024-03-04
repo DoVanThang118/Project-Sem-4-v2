@@ -28,6 +28,7 @@ public class CategoryReq {
 
     //
     private Set<Image> images;
+    private List<Image> imagelist;
     private Set<MultipartFile> img;
     //
 

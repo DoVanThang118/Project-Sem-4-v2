@@ -49,6 +49,10 @@ public class CategoryServiceImpl implements CategoryService {
             req.setStatus(1);
         }
 
+        if (req.getImg() == null && req.getImages() != null) {
+            req.setImg(null);
+        }
+
         if (req.getImg() != null) {
             Set<Image> files = new HashSet<>();
             for (MultipartFile file : req.getImg()) {

@@ -44,6 +44,10 @@ public class Order {
     )
     private Set<User> users;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    private Restaurant restaurant;
+
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.MERGE,

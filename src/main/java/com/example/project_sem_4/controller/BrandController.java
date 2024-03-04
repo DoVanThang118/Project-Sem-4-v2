@@ -28,7 +28,7 @@ public class BrandController {
 
     @PostMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getBrand(@ModelAttribute BrandReq req) {
+    public ResponseEntity<?> getBrand(@RequestBody BrandReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<BrandDTO> page = brandService.getBrand(
                 pageable,

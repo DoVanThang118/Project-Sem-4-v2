@@ -48,7 +48,7 @@ public class CategoryController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<?> getCategories(@ModelAttribute CategoryReq req) {
+    public ResponseEntity<?> getCategories(@RequestBody CategoryReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<CategoryDTO> page = categoryService.getCategories(
                 pageable,

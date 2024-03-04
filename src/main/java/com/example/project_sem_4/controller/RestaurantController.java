@@ -48,7 +48,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<?> getRestaurants(@ModelAttribute RestaurantReq req) {
+    public ResponseEntity<?> getRestaurants(@RequestBody RestaurantReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<RestaurantDTO> page = restaurantService.getRestaurant(
                 pageable,
