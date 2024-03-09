@@ -26,7 +26,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             "and (:hourStart is null or r.hourStart = :hourStart) " +
             "and (:hourEnd is null or r.hourEnd = :hourEnd) " +
             "and (:rate is null or r.rate in :rate) " +
-            "and (:status is null or r.status in :status)"
+            "and (:status is null or r.status in :status)" +
+            "order by r.rate desc"
     )
 //    @Query(value = "select r from Restaurant r " +
 //            "where (coalesce(:id, null) is null or :id = '' or r.id in (:id)) " +
