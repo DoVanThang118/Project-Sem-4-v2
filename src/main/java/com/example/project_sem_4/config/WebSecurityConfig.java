@@ -44,9 +44,10 @@ public class WebSecurityConfig  {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers(HttpMethod.POST, "/register", "/authenticate").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/restaurants", "/api/products").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/restaurants/list", "/api/products/list").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
-//                                .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
