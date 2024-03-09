@@ -8,13 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public interface RestaurantService {
 
     RestaurantDTO createRestaurant(RestaurantReq req) throws IOException;
 
-    Page<RestaurantDTO> getRestaurant(Pageable pageable, Long id, String name, String description, String tel, String address, Integer status);
+    Page<RestaurantDTO> getRestaurant(Pageable pageable, Long id, String name, String description, String tel, String address, List<String> meals, List<String> cuisines, LocalTime hourStart, LocalTime hourEnd, Double rate, Integer status);
 
     void deleteRestaurant(Long id);
 

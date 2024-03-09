@@ -57,6 +57,11 @@ public class RestaurantController {
                 req.getDescription(),
                 req.getTel(),
                 req.getAddress(),
+                req.getMeals(),
+                req.getCuisines(),
+                req.getHourStart(),
+                req.getHourEnd(),
+                req.getRate(),
                 req.getStatus()
         );
         DataRes res = new DataRes();

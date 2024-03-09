@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, Date birthday, String type, Integer status) {
+    public Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Integer status) {
         Page<User> users = userRepository.findUsers(pageable, id, name, email, tel ,address, birthday, type, status);
         return users.map(UserPageMapper.INSTANCE::mapEntityToDTO);
     }

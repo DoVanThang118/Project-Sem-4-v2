@@ -3,11 +3,13 @@ package com.example.project_sem_4.model.dto;
 import com.example.project_sem_4.entity.Cart;
 import com.example.project_sem_4.entity.Image;
 import com.example.project_sem_4.entity.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +24,8 @@ public class UserDTO {
     private String email;
     private String tel;
     private String address;
-    private Date birthday;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate birthday;
     private String type;
     private Integer status;
 //    private List<CartDTO> carts;

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -78,8 +79,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Page<RestaurantDTO> getRestaurant(Pageable pageable, Long id, String name, String description, String tel, String address, Integer status) {
-        Page<Restaurant> restaurants = restaurantRepository.findRestaurants(pageable, id, name, description, tel, address, status);
+    public Page<RestaurantDTO> getRestaurant(Pageable pageable, Long id, String name, String description, String tel, String address, List<String> meals, List<String> cuisines, LocalTime hourStart, LocalTime hourEnd, Double rate, Integer status) {
+        Page<Restaurant> restaurants = restaurantRepository.findRestaurants(pageable, id, name, description, tel, address, meals, cuisines, hourStart, hourEnd, rate, status);
         return restaurants.map(RestaurantMapper.INSTANCE::mapEntityToDTO);
     }
 

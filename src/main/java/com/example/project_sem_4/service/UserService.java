@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,5 +24,5 @@ public interface UserService {
 
     User findByEmail(String name);
 
-    Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, Date birthday, String type, Integer status);
+    Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Integer status);
 }

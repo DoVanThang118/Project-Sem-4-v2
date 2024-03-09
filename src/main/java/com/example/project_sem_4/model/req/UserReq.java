@@ -9,6 +9,7 @@ import lombok.Setter;
 import com.example.project_sem_4.entity.Role;
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +46,7 @@ public class UserReq {
 
     @NotNull(message = "Birthday is required")
     @NotEmpty(message = "Birthday is required")
-    private Date birthday;
+    private LocalDate birthday;
 
     @NotNull(message = "Type is required")
     @NotEmpty(message = "Type is required")

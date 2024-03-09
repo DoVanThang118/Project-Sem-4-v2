@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,11 +22,25 @@ public class Restaurant {
 
     private String name;
 
-    private String description;
-
     private String tel;
 
+    @ElementCollection
+    private List<String> meals;
+
+    @ElementCollection
+    private List<String> cuisines;
+
+    private Double rate;
+
+    @Column(name = "hour_start")
+    private LocalTime hourStart;
+
+    @Column(name = "hour_end")
+    private LocalTime hourEnd;
+
     private String address;
+
+    private String description;
 
     private Integer status;
 

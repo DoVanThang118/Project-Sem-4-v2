@@ -1,11 +1,13 @@
 package com.example.project_sem_4.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +36,9 @@ public class User {
 
     private String address;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date birthday;
+//    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
 
     private String type;
 
