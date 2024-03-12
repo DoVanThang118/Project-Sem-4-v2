@@ -59,6 +59,7 @@ public class ProductController {
                 req.getStatus(),
                 req.getType(),
                 req.getRate(),
+                req.getRestaurantId(),
                 req.getCategoryId()
         );
         DataRes res = new DataRes();

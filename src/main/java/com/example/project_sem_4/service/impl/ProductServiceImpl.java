@@ -84,8 +84,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long categoryId) {
-        Page<Product> products = productRepository.findProducts(pageable, id, name, description, price, status, type, rate, categoryId);
+    public Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long restaurantId, Long categoryId) {
+        Page<Product> products = productRepository.findProducts(pageable, id, name, description, price, status, type, rate, restaurantId, categoryId);
         return products.map(ProductMapper.INSTANCE::mapEntityToDTO);
     }
 

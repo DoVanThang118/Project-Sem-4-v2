@@ -14,7 +14,7 @@ public interface ProductService {
 
     ProductDTO createProduct(ProductReq req) throws IOException;
 
-    Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long categoryId);
+    Page<ProductDTO> getProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long restaurantId, Long categoryId);
 
     void deleteProduct(Long id);
 
