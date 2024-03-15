@@ -28,7 +28,7 @@ public class ProductDTO {
 
     private Integer rate;
 
-    private List<String> type;
+    private String type;
 
     private Integer status;
 

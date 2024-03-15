@@ -28,7 +28,7 @@ public class ProductReq {
 
     private Integer rate;
 
-    private List<String> type;
+    private String type;
 
     private Integer status;
     //

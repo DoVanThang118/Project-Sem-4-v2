@@ -31,8 +31,7 @@ public class Product {
 
     private Integer rate;
 
-    @ElementCollection
-    private List<String> type;
+    private String type;
 
     private Integer status;
 
