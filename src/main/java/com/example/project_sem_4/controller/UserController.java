@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -114,7 +115,7 @@ public class UserController {
     }
 
     @PutMapping("/api/users/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody UserReq req, @PathVariable Long id) {
+    public ResponseEntity<?> updateUser(@ModelAttribute UserReq req, @PathVariable Long id) throws IOException {
         UserDTO result = userService.updateUser(req, id);
         return ResponseEntity.ok(result);
     }

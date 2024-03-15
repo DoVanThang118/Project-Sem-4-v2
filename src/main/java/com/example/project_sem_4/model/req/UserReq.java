@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.example.project_sem_4.entity.Role;
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -59,6 +60,7 @@ public class UserReq {
     private Set<Role> roles;
 
     private Set<Image> images;
+    private Set<MultipartFile> img;
 
     private int pageNumber = 0;
 

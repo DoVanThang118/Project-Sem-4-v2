@@ -1,11 +1,14 @@
 package com.example.project_sem_4.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.example.project_sem_4.entity.Image;
 import com.example.project_sem_4.entity.Role;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.UserDTO;
 import com.example.project_sem_4.model.mapper.UserMapper;
 import com.example.project_sem_4.model.mapper.UserPageMapper;
 import com.example.project_sem_4.model.req.UserReq;
+import com.example.project_sem_4.repository.ImageRepository;
 import com.example.project_sem_4.repository.RoleRepository;
 import com.example.project_sem_4.repository.UserRepository;
 import com.example.project_sem_4.service.UserService;
@@ -13,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -24,10 +29,15 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
+    private final ImageRepository imageRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    private final Cloudinary cloudinary;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ImageRepository imageRepository, Cloudinary cloudinary) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.imageRepository = imageRepository;
+        this.cloudinary = cloudinary;
     }
 
     @Override
@@ -64,12 +74,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserReq req, Long id) {
+    public UserDTO updateUser(UserReq req, Long id) throws IOException {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new RuntimeException("Not Found User");
         }
         req.setId(id);
+        if (req.getImg() != null) {
+            req.setImages(new HashSet<>());
+            Set<Image> files = new HashSet<>();
+            for (MultipartFile file : req.getImg()) {
+                Image imageReq = new Image();
+                String url = cloudinary.uploader().upload(
+                                file.getBytes(),
+                                Map.of("public_id", UUID.randomUUID().toString()))
+                        .get("url").toString();
+                imageReq.setUrl(url);
+                imageReq.setStatus(1);
+                Image image = imageRepository.save(imageReq);
+                files.add(image);
+            }
+            req.setImages(files);
+        }
         User update = UserMapper.toUser(req);
         try {
             userRepository.save(update);

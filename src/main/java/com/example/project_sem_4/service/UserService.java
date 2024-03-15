@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface UserService {
 
     UserDTO createUser(UserReq req);
 
-    UserDTO updateUser(UserReq req, Long id);
+    UserDTO updateUser(UserReq req, Long id) throws IOException;
 
     void deleteUser(Long id);
 
