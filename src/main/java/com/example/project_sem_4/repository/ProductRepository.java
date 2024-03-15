@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (:description is null or p.description like %:description%) " +
             "and (:price is null or p.price in (:price)) " +
             "and (:status is null or p.status in (:status)) " +
-            "and (:type is null or p.type like %:type%) " +
+            "and (:type is null or :type member of p.type) " +
             "and (:rate is null or p.rate in (:rate)) " +
             "and (:restaurantId is null or r.id in (:restaurantId)) " +
             "and (:categoryId is null or c.id in (:categoryId)) "

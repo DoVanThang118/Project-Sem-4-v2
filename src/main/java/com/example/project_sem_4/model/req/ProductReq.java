@@ -6,6 +6,7 @@ import com.example.project_sem_4.entity.Restaurant;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -27,7 +28,7 @@ public class ProductReq {
 
     private Integer rate;
 
-    private String type;
+    private List<String> type;
 
     private Integer status;
     //
