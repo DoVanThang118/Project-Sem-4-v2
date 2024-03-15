@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,6 +30,7 @@ public class CartController {
     @Autowired
     private UserService userService;
 
+    @Transactional
     @PostMapping("/create")
     public ResponseEntity<?> createCart(@RequestBody CartReq req, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
@@ -50,13 +52,6 @@ public class CartController {
         return ResponseEntity.ok("Delete Success");
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<?> deleteAllCart(Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName());
-        cartService.deleteAllCart(user.getId());
-        return ResponseEntity.ok("Delete Success");
-    }
-
     @PostMapping("/list")
     public ResponseEntity<?> getCart(@RequestBody CartReq req, Authentication authentication) {
 
@@ -68,6 +63,7 @@ public class CartController {
                 pageable,
                 req.getId(),
                 req.getStatus(),
+                req.getRestaurantId(),
                 req.getUserId()
         );
         DataRes res = new DataRes();
@@ -77,7 +73,7 @@ public class CartController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllProducts(Authentication authentication) {
+    public ResponseEntity<?> getAllCart(Authentication authentication) {
 
         User user = userService.findByEmail(authentication.getName());
 
@@ -86,6 +82,7 @@ public class CartController {
         DataRes res = new DataRes();
         res.setData(carts.getContent());
         res.setPagination(new Pagination(carts.getPageable().getPageNumber(), carts.getSize(), carts.getTotalElements()));
+
         return ResponseEntity.ok(res);
     }
 }
