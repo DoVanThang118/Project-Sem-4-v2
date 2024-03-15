@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Data
@@ -15,7 +16,7 @@ public class OrderDTO {
 
     private Long id;
 
-    private Date createDate;
+    private Timestamp createDate;
 
     private Double totalMoney;
 
@@ -27,5 +28,9 @@ public class OrderDTO {
 
     private String phone;
 
+    private RestaurantDTO restaurant;
+
     private Set<UserDTO> users;
+
+    private List<OrderDetailDTO> orderDetails;
 }

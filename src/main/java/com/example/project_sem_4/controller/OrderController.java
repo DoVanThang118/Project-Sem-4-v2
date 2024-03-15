@@ -63,6 +63,7 @@ public class OrderController {
         Page<OrderDTO> page = orderService.getOrders(
                 pageable,
                 req.getId(),
+                req.getUserId(),
                 req.getStatus()
         );
         DataRes res = new DataRes();

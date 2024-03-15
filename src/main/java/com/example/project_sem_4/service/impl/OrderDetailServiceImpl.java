@@ -38,26 +38,26 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         List<OrderDetailDTO> itemDTO = new ArrayList<>();
 
-        for (Cart cart : carts) {
-
-            OrderDetailReq req = new OrderDetailReq();
-
-            req.setQuantity(cart.getQty());
-
-            Product product = cart.getProduct();
-            req.setPrice(product.getPrice());
-
-            req.setSum(cart.getQty()* product.getPrice());
-
-            req.setStatus(1);
-
-            OrderDetail orderDetail = OrderDetailMapper.INSTANCE.mapReqToEntity(req);
-
-//            user.addOrderDetail(orderDetail);
-
-            item.add(orderDetail);
-            oderDetailRepository.save(orderDetail);
-        }
+//        for (Cart cart : carts) {
+//
+//            OrderDetailReq req = new OrderDetailReq();
+//
+//            req.setQuantity(cart.getQty());
+//
+//            Product product = cart.getProducts();
+//            req.setPrice(product.getPrice());
+//
+//            req.setSum(cart.getQty()* product.getPrice());
+//
+//            req.setStatus(1);
+//
+//            OrderDetail orderDetail = OrderDetailMapper.INSTANCE.mapReqToEntity(req);
+//
+////            user.addOrderDetail(orderDetail);
+//
+//            item.add(orderDetail);
+//            oderDetailRepository.save(orderDetail);
+//        }
 
         for (OrderDetail orderDetail : item) {
             itemDTO.add(OrderDetailMapper.INSTANCE.mapEntityToDTO(orderDetail));

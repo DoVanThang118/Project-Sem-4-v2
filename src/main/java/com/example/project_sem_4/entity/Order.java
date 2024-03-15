@@ -2,16 +2,13 @@ package com.example.project_sem_4.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,7 +20,7 @@ public class Order {
     private Long id;
 
     @Column(name = "create_date")
-    private Date createDate;
+    private Timestamp createDate;
 
     @Column(name = "total_money")
     private Double totalMoney;
@@ -42,7 +39,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
@@ -53,7 +50,6 @@ public class Order {
             cascade = CascadeType.MERGE,
             orphanRemoval = true
     )
-    @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
 }

@@ -2,11 +2,13 @@ package com.example.project_sem_4.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,19 +19,24 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer quantity;
+    private Integer status;
+
+    private Integer qty;
 
     private Double price;
 
-    private Double sum;
-
-    private Integer status;
+    private Double total;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JsonIgnore
     private Order order;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+//    @OneToOne(cascade = CascadeType.MERGE)
+//    @JoinColumn(name = "cart_id")
+//    private Cart cart;
 }

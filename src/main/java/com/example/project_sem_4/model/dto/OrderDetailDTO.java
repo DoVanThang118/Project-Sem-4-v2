@@ -2,6 +2,7 @@ package com.example.project_sem_4.model.dto;
 
 import com.example.project_sem_4.entity.Cart;
 import com.example.project_sem_4.entity.Order;
+import com.example.project_sem_4.entity.Product;
 import com.example.project_sem_4.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,15 +15,15 @@ public class OrderDetailDTO {
 
     private Long id;
 
-    private Integer quantity;
+    private Integer qty;
 
     private Double price;
 
-    private Double sum;
+    private Double total;
 
     private Integer status;
 
-    private OrderDTO order;
+    private ProductDTO product;
 
-    private CartDTO cart;
+//    private CartDTO cart;
 }

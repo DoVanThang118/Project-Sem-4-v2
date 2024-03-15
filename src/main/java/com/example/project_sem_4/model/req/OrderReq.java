@@ -1,12 +1,15 @@
 package com.example.project_sem_4.model.req;
 
+import com.example.project_sem_4.entity.Cart;
 import com.example.project_sem_4.entity.OrderDetail;
+import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +23,7 @@ public class OrderReq {
 
     private Long id;
 
-    private Date createDate;
+    private Timestamp createDate;
 
     private Double totalMoney;
 
@@ -33,11 +36,17 @@ public class OrderReq {
     private String phone;
 
     private Set<User> users;
+    private Long userId;
+
+    //
+    private Restaurant restaurant;
+    private Long restaurantId;
 
     //
     private List<Long> orderDetailId;
     private List<OrderDetail> orderDetails = new ArrayList<>();
     //
+    private Long cartId;
 
     private int pageNumber = 0;
 

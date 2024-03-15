@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @Query(value = "select o from Order o " +
+    @Query(value = "select o from Order o join o.users u " +
             "WHERE (:id is null OR o.id in (:id)) " +
+            "and (:userId is null OR u.id in (:id)) " +
             "and (:status is null or o.status in (:status)) ")
-    Page<Order> findOrders(Pageable pageable, Long id, Integer status);
+    Page<Order> findOrders(Pageable pageable, Long id, Long userId, Integer status);
 }

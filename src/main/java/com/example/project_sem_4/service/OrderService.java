@@ -13,7 +13,7 @@ public interface OrderService {
 
     OrderDTO saveOrder (OrderReq req, User user);
 
-    Page<OrderDTO> getOrders(Pageable pageable, Long id, Integer status);
+    Page<OrderDTO> getOrders(Pageable pageable, Long id, Long userId, Integer status);
 
     void deleteOrder(Long id);
 

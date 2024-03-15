@@ -1,9 +1,6 @@
 package com.example.project_sem_4.service.impl;
 
-import com.example.project_sem_4.entity.Brand;
-import com.example.project_sem_4.entity.Order;
-import com.example.project_sem_4.entity.OrderDetail;
-import com.example.project_sem_4.entity.User;
+import com.example.project_sem_4.entity.*;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.OrderMapper;
@@ -18,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -35,40 +32,46 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO saveOrder(OrderReq req, User user) {
-        if (req == null) {
-            throw new RuntimeException("NullPointerException");
-        }
-        if (req.getOrderDetailId() != null) {
-            for (Long oid : req.getOrderDetailId()) {
-                Optional<OrderDetail> orderDetail = orderDetailRepository.findById(oid);
-                orderDetail.ifPresent(detail -> req.getOrderDetails().add(detail));
-            }
+        if (req == null || req.getCartId() == null || req.getAddress() == null || req.getPhone() == null) {
+            throw new RuntimeException("Invalid order request");
         }
 
-        if (req.getUsers() == null) {
-            req.setUsers(new HashSet<>());
-        }
-//        Set<User> users = new HashSet<>();
-        req.getUsers().add(user);
-//        users.add(user);
-//        req.setUsers(users);
-//        req.setUsers(new HashSet<>(Collections.singletonList(user)));
+        req.setStatus(req.getStatus() == null ? 1 : req.getStatus());
+
+        Cart cart = cartRepository.findById(req.getCartId()).orElseThrow(() -> new RuntimeException("Cart not found"));
 
         Order order = OrderMapper.INSTANCE.mapReqToEntity(req);
-//        order.addUser(user);
+        order.setStatus(req.getStatus());
+        Date date = new Date();
+        Timestamp ts = new Timestamp(date.getTime());
+        order.setCreateDate(ts);
+        order.setTotalMoney(cart.getSubTotal());
+        order.getUsers().add(user);
+        order.setRestaurant(cart.getRestaurant());
+        orderRepository.save(order);
 
-        try {
-            orderRepository.save(order);
-        } catch (Exception e) {
-            throw new RuntimeException("Error");
+        List<OrderDetail> list = new ArrayList<>();
+        for (CartItem cartItem : cart.getCartItems()) {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setStatus(1);
+            orderDetail.setQty(cartItem.getQty());
+            orderDetail.setPrice(cartItem.getProduct().getPrice());
+            orderDetail.setTotal(cartItem.getTotal());
+            orderDetail.setProduct(cartItem.getProduct());
+            orderDetail.setOrder(order);
+            orderDetailRepository.save(orderDetail);
+            list.add(orderDetail);
         }
 
+        order.setOrderDetails(list);
+
         return OrderMapper.INSTANCE.mapEntityToDTO(order);
+
     }
 
     @Override
-    public Page<OrderDTO> getOrders(Pageable pageable, Long id, Integer status) {
-        Page<Order> orders = orderRepository.findOrders(pageable, id, status);
+    public Page<OrderDTO> getOrders(Pageable pageable, Long id, Long userId, Integer status) {
+        Page<Order> orders = orderRepository.findOrders(pageable, id, userId, status);
         return orders.map(OrderMapper.INSTANCE::mapEntityToDTO);
     }
 
