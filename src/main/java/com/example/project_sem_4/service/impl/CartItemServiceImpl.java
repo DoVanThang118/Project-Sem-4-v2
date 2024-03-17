@@ -6,9 +6,11 @@ import com.example.project_sem_4.model.dto.CartItemDTO;
 import com.example.project_sem_4.model.mapper.CartItemMapper;
 import com.example.project_sem_4.model.req.CartItemReq;
 import com.example.project_sem_4.repository.CartItemRepository;
+import com.example.project_sem_4.repository.CartRepository;
 import com.example.project_sem_4.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -17,6 +19,10 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
 
     @Override
     public CartItemDTO updateCartItem(CartItemReq req) {
@@ -43,12 +49,33 @@ public class CartItemServiceImpl implements CartItemService {
     public void deleteCartItem(Long id) {
         Optional<CartItem> cartItem = cartItemRepository.findById(id);
         if (cartItem.isEmpty()) {
-            throw new RuntimeException("Not found cart has id = " + id);
+            throw new RuntimeException("Cart item not found with id: " + id);
         }
+
+        CartItem item = cartItem.get();
+        Cart cart = item.getCart();
+
         try {
-            cartItemRepository.delete(cartItem.get());
+            // Xóa cartItem khỏi cơ sở dữ liệu
+            cartItemRepository.delete(item);
+
+            // Cập nhật subTotal của cart
+            double subTotal = cart.getCartItems().stream()
+                    .mapToDouble(CartItem::getTotal)
+                    .sum();
+            cart.setSubTotal(subTotal);
+            cartRepository.save(cart);
+
+            // Kiểm tra nếu không còn cartItem nào trong cart, thì xóa luôn cart
+//            if (cart.getSubTotal() == 0) {
+//                cartRepository.delete(cart);
+//            }
+            if (cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
+                cartRepository.delete(cart);
+            }
+
         } catch (Exception e) {
-            throw new RuntimeException("Database error. Can't delete Cart");
+            throw new RuntimeException("Database error. Can't delete cart item");
         }
     }
 }

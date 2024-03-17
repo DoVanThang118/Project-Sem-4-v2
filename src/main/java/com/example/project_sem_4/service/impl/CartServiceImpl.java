@@ -40,11 +40,6 @@ public class CartServiceImpl implements CartService {
             throw new RuntimeException("Invalid cart request");
         }
 
-//        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(req.getRestaurantId());
-//        Restaurant restaurant = restaurantOptional.orElseThrow(() -> new RuntimeException("Restaurant not found"));
-//
-//        Optional<Product> productOptional = productRepository.findById(req.getProductId());
-//        Product product = productOptional.orElseThrow(() -> new RuntimeException("Product not found"));
         Restaurant restaurant = restaurantRepository.findById(req.getRestaurantId())
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 

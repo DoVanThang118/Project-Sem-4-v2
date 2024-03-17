@@ -41,12 +41,12 @@ public class Cart {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-//    public Double getSubTotal() {
-//        if (cartItems != null) {
-//            return cartItems.stream()
-//                    .mapToDouble(CartItem::getTotal)
-//                    .sum();
-//        }
-//        return 0.0;
-//    }
+    //    public Double getSubTotal() {
+    //        if (cartItems != null) {
+    //            return cartItems.stream()
+    //                    .mapToDouble(CartItem::getTotal)
+    //                    .sum();
+    //        }
+    //        return 0.0;
+    //    }
 }
