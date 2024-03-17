@@ -1,8 +1,5 @@
 package com.example.project_sem_4.model.dto;
 
-import com.example.project_sem_4.entity.Brand;
-import com.example.project_sem_4.entity.Image;
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalTime;

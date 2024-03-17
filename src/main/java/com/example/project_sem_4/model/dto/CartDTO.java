@@ -1,15 +1,11 @@
 package com.example.project_sem_4.model.dto;
 
-import com.example.project_sem_4.entity.CartItem;
-import com.example.project_sem_4.entity.Product;
-import com.example.project_sem_4.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDTO {

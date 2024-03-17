@@ -29,7 +29,6 @@ import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
 
 @Tag(name = "User", description = "User management APIs")
 @RestController

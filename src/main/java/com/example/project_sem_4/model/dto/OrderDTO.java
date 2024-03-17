@@ -1,15 +1,12 @@
 package com.example.project_sem_4.model.dto;
 
-import com.example.project_sem_4.entity.Cart;
-import com.example.project_sem_4.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {

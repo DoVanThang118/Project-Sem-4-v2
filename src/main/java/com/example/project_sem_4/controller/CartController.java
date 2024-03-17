@@ -2,7 +2,6 @@ package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.CartDTO;
-import com.example.project_sem_4.model.dto.ProductDTO;
 import com.example.project_sem_4.model.req.CartReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
