@@ -22,7 +22,7 @@ public class CartItem {
 
     private Double total;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "cart_id")
     @JsonIgnore
     private Cart cart;

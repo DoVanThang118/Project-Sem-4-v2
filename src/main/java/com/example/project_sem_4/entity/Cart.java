@@ -26,7 +26,7 @@ public class Cart {
 
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
@@ -37,7 +37,7 @@ public class Cart {
     )
     private List<CartItem> cartItems = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
