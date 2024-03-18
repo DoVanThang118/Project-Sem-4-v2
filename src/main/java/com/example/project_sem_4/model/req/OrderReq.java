@@ -23,6 +23,10 @@ public class OrderReq {
 
     private Long id;
 
+    private String name;
+
+    private String email;
+
     private Timestamp createDate;
 
     private Double totalMoney;

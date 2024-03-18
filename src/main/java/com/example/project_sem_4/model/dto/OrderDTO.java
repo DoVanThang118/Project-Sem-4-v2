@@ -13,6 +13,10 @@ public class OrderDTO {
 
     private Long id;
 
+    private String name;
+
+    private String email;
+
     private Timestamp createDate;
 
     private Double totalMoney;

@@ -28,9 +28,14 @@ public class Order {
 
     private String note;
 
-    private String address;
+    private String name;
+
+    private String email;
 
     private String phone;
+
+    private String address;
+
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(

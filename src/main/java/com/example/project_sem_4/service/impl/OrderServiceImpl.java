@@ -41,7 +41,6 @@ public class OrderServiceImpl implements OrderService {
         Cart cart = cartRepository.findById(req.getCartId()).orElseThrow(() -> new RuntimeException("Cart not found"));
 
         Order order = OrderMapper.INSTANCE.mapReqToEntity(req);
-        order.setStatus(req.getStatus());
         Date date = new Date();
         Timestamp ts = new Timestamp(date.getTime());
         order.setCreateDate(ts);
