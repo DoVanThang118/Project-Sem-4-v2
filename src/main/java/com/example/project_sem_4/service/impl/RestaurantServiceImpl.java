@@ -3,6 +3,7 @@ package com.example.project_sem_4.service.impl;
 import com.cloudinary.Cloudinary;
 import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Image;
+import com.example.project_sem_4.entity.Order;
 import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
@@ -10,6 +11,7 @@ import com.example.project_sem_4.model.mapper.RestaurantMapper;
 import com.example.project_sem_4.model.req.RestaurantReq;
 import com.example.project_sem_4.repository.BrandRepository;
 import com.example.project_sem_4.repository.ImageRepository;
+import com.example.project_sem_4.repository.OrderRepository;
 import com.example.project_sem_4.repository.RestaurantRepository;
 import com.example.project_sem_4.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
 
     @Override
@@ -101,5 +106,21 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Page<RestaurantDTO> getAllRestaurants(Pageable pageable) {
         Page<Restaurant> restaurants = restaurantRepository.findAll(pageable);
         return restaurants.map(RestaurantMapper.INSTANCE::mapEntityToDTO);
+    }
+
+    @Override
+    public Double totalRevenue() {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        double totalRevenue = 0.0;
+
+        for (Restaurant res : restaurants) {
+            List<Order> orders = orderRepository.findAllByRestaurantId(res.getId());
+
+            for (Order order : orders) {
+                totalRevenue += order.getTotalMoney();
+            }
+        }
+
+        return totalRevenue;
     }
 }

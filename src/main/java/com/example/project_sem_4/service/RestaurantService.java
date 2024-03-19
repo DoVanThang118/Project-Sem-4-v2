@@ -21,4 +21,6 @@ public interface RestaurantService {
     void deleteRestaurant(Long id);
 
     Page<RestaurantDTO> getAllRestaurants(Pageable pageable);
+
+    Double totalRevenue();
 }

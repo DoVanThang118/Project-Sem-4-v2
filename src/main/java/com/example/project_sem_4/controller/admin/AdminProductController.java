@@ -1,4 +1,4 @@
-package com.example.project_sem_4.controller;
+package com.example.project_sem_4.controller.admin;
 
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.ProductDTO;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/products")
-@Tag(name = "Product", description = "Product management APIs")
-public class ProductController {
+@RequestMapping("/api/admin/products")
+@Tag(name = "Admin Product", description = "Product Admin management APIs")
+public class AdminProductController {
 
     @Autowired
     private ProductService productService;
@@ -32,7 +32,7 @@ public class ProductController {
     private UserService userService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> saveProduct(@ModelAttribute ProductReq req, Authentication authentication) throws IOException {
         User user = userService.findByEmail(authentication.getName());
         ProductDTO create = productService.createProduct(req, user);
@@ -40,7 +40,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> updateProduct(@ModelAttribute ProductReq req, Authentication authentication, @PathVariable Long id) throws IOException {
         User user = userService.findByEmail(authentication.getName());
         req.setId(id);
@@ -49,14 +49,16 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Delete Success");
     }
 
     @PostMapping("/list")
-    public ResponseEntity<?> getProducts(@RequestBody ProductReq req) {
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> getProducts(@RequestBody ProductReq req, Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<ProductDTO> page = productService.getProducts(
                 pageable,
@@ -67,7 +69,7 @@ public class ProductController {
                 req.getStatus(),
                 req.getType(),
                 req.getRate(),
-                req.getRestaurantId(),
+                user.getRestaurant().getId(),
                 req.getCategoryId()
         );
         DataRes res = new DataRes();
@@ -77,7 +79,8 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllProducts() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllProducts(Authentication authentication) {
         Pageable pageable = PageRequest.of(0,20);
         Page<ProductDTO> products = productService.getAllProducts(pageable);
         DataRes res = new DataRes();

@@ -1,5 +1,6 @@
 package com.example.project_sem_4.model.dto;
 
+import com.example.project_sem_4.entity.Restaurant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class UserDTO {
     private LocalDate birthday;
     private String type;
     private Integer status;
-//    private List<CartDTO> carts;
+    private Restaurant restaurant;
     private Set<RoleDTO> roles;
     private Set<ImageDTO> images;
 }

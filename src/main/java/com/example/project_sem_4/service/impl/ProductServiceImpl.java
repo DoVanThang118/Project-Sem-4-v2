@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     private Cloudinary cloudinary;
 
     @Override
-    public ProductDTO createProduct(ProductReq req) throws IOException {
+    public ProductDTO createProduct(ProductReq req, User user) throws IOException {
         if (req == null) {
             throw new RuntimeException("NullPointerException");
         }
@@ -49,19 +49,19 @@ public class ProductServiceImpl implements ProductService {
                 throw new RuntimeException("Product is already in use");
             }
         }
-        if (req.getRestaurantId() != null) {
-            Optional<Restaurant> restaurant = restaurantRepository.findById(req.getRestaurantId());
-            restaurant.ifPresent(req::setRestaurant);
-        }
+//        if (req.getRestaurantId() != null) {
+//            Optional<Restaurant> restaurant = restaurantRepository.findById(req.getRestaurantId());
+//            restaurant.ifPresent(req::setRestaurant);
+//        }
+        Optional<Restaurant> restaurant = restaurantRepository.findById(user.getRestaurant().getId());
+        restaurant.ifPresent(req::setRestaurant);
 
         if (req.getCategoryId() != null) {
             Optional<Category> category = categoryRepository.findById(req.getCategoryId());
             category.ifPresent(req::setCategory);
         }
 
-        if (req.getStatus() == null) {
-            req.setStatus(1);
-        }
+        req.setStatus(req.getStatus() == null ? 1 : req.getStatus());
 
         if (req.getImg() != null) {
             Set<Image> files = new HashSet<>();
@@ -104,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findAllProducts(pageable);
         return products.map(ProductMapper.INSTANCE::mapEntityToDTO);
     }
 }

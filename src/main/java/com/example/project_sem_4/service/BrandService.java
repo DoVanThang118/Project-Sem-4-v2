@@ -5,15 +5,19 @@ import com.example.project_sem_4.model.req.BrandReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public interface BrandService {
     Page<BrandDTO> getBrand(Pageable pageable, Long id, String name, String description, String hotline, String email);
 
     BrandDTO saveBrand(BrandReq req) throws IOException;
+
+//    BrandDTO updateBrand(BrandReq req, Set<MultipartFile> files, Long id) throws IOException;
 
     void deleteBrand(Long id);
 

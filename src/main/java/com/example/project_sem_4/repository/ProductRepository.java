@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (:categoryId is null or c.id in (:categoryId)) "
     )
     Page<Product> findProducts(Pageable pageable, Long id, String name, String description, Double price, Integer status, String type, Integer rate, Long restaurantId, Long categoryId);
+
+    @Query("SELECT p FROM Product p JOIN p.restaurant r ORDER BY r.id")
+    Page<Product> findAllProducts(Pageable pageable);
 }

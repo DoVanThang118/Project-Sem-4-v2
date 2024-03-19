@@ -2,6 +2,7 @@ package com.example.project_sem_4.model.req;
 
 import com.example.project_sem_4.entity.Cart;
 import com.example.project_sem_4.entity.Image;
+import com.example.project_sem_4.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,7 +56,8 @@ public class UserReq {
 
     private Integer status;
 
-    private List<Cart> carts;
+    private Long restaurantId;
+    private Restaurant restaurant;
 
     private Set<Role> roles;
 
