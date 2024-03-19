@@ -29,8 +29,8 @@ public class OrderDetail {
     @JsonIgnore
     private Order order;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
 //    @OneToOne(cascade = CascadeType.MERGE)

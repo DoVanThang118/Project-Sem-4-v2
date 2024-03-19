@@ -64,6 +64,8 @@ public class OrderServiceImpl implements OrderService {
 
         order.setOrderDetails(list);
 
+        cartRepository.delete(cart);
+
         return OrderMapper.INSTANCE.mapEntityToDTO(order);
 
     }
