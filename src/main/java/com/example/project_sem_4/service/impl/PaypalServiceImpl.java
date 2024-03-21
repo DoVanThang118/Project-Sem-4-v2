@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class PaypalServiceImpl implements PaypalService {
@@ -49,6 +48,7 @@ public class PaypalServiceImpl implements PaypalService {
         redirectUrls.setCancelUrl(cancelUrl);
         redirectUrls.setReturnUrl(successUrl);
         payment.setRedirectUrls(redirectUrls);
+        apiContext.setMaskRequestId(true);
 
         return payment.create(apiContext);
     }
