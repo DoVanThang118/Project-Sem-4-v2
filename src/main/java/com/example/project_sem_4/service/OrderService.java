@@ -13,7 +13,9 @@ public interface OrderService {
 
     OrderDTO saveOrder (OrderReq req, User user);
 
-    Page<OrderDTO> getOrders(Pageable pageable, Long id, Long userId, Integer status);
+    OrderDTO updateOrder (OrderReq req, Long id, User user);
+
+    Page<OrderDTO> getOrders(Pageable pageable, Long id, Long userId, Long restaurantId, Integer status);
 
     void deleteOrder(Long id);
 

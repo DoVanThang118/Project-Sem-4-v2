@@ -1,11 +1,10 @@
-package com.example.project_sem_4.controller;
+package com.example.project_sem_4.controller.admin;
 
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
-import com.example.project_sem_4.service.CartService;
 import com.example.project_sem_4.service.OrderService;
 import com.example.project_sem_4.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,14 +13,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/orders")
-@Tag(name = "Order", description = "Order management APIs")
-public class OrderController {
+@RequestMapping("/api/admin/orders")
+@Tag(name = "Admin Order", description = "Admin Order management APIs")
+public class AdminOrderController {
 
     @Autowired
     private OrderService orderService;
@@ -29,15 +28,8 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
-    @Transactional
-    public ResponseEntity<?> createOrder(@RequestBody OrderReq req, Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName());
-        OrderDTO create = orderService.saveOrder(req, user);
-        return ResponseEntity.ok(create);
-    }
-
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> updateOrder(@RequestBody OrderReq req, @PathVariable Long id, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         OrderDTO update = orderService.updateOrder(req, id, user);
@@ -45,12 +37,14 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.ok("Delete Success");
     }
 
     @PostMapping("/list")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getOrders(@RequestBody OrderReq req, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         Long restaurantId = null;
@@ -72,6 +66,7 @@ public class OrderController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getAllOrders(Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         Pageable pageable = PageRequest.of(0,20);

@@ -8,6 +8,7 @@ import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.repository.CartRepository;
 import com.example.project_sem_4.repository.OrderDetailRepository;
 import com.example.project_sem_4.repository.OrderRepository;
+import com.example.project_sem_4.repository.UserRepository;
 import com.example.project_sem_4.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private CartRepository cartRepository;
@@ -71,8 +75,41 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDTO> getOrders(Pageable pageable, Long id, Long userId, Integer status) {
-        Page<Order> orders = orderRepository.findOrders(pageable, id, userId, status);
+    public OrderDTO updateOrder(OrderReq req, Long id, User user) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        if (req.getName() != null) {
+            order.setName(req.getName());
+        }
+        if (req.getEmail() != null) {
+            order.setEmail(req.getEmail());
+        }
+        if (req.getId() != null) {
+            order.setId(req.getId());
+        }
+        if (req.getAddress() != null) {
+            order.setAddress(req.getAddress());
+        }
+        if (req.getNote() != null) {
+            order.setNote(req.getNote());
+        }
+        if (req.getPhone() !=null) {
+            order.setPhone(req.getPhone());
+        }
+        if (req.getStatus() != null) {
+            order.setStatus(req.getStatus());
+        }
+        User shipper = userRepository.findById(req.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found"));
+        order.getUsers().add(shipper);
+
+        order.getUsers().add(user);
+        orderRepository.save(order);
+
+        return OrderMapper.INSTANCE.mapEntityToDTO(order);
+    }
+
+    @Override
+    public Page<OrderDTO> getOrders(Pageable pageable, Long id, Long userId, Long restaurantId, Integer status) {
+        Page<Order> orders = orderRepository.findOrders(pageable, id, userId, restaurantId, status);
         return orders.map(OrderMapper.INSTANCE::mapEntityToDTO);
     }
 

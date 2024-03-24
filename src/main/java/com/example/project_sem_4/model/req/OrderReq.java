@@ -42,6 +42,7 @@ public class OrderReq {
 
     private Set<User> users;
     private Long userId;
+    private Long shipperId;
 
     //
     private Restaurant restaurant;
