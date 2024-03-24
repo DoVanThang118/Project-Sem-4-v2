@@ -16,12 +16,14 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "select o from Order o join o.users u " +
             "WHERE (:id is null OR o.id in (:id)) " +
             "and (:userId is null OR u.id in (:id)) " +
-            "and (:status is null or o.status in (:status)) ")
+            "and (:status is null or o.status in (:status)) " +
+            "ORDER BY o.id DESC")
     Page<Order> findOrders(Pageable pageable, Long id, Long userId, Integer status);
 
     List<Order> findAllByRestaurantId(Long id);
 
     @Query(value = "select o from Order o join o.users u " +
-            "where (:userId is null or u.id in (:userId))")
+            "where (:userId is null or u.id in (:userId)) " +
+            "ORDER BY o.id DESC")
     Page<Order> findAllByUserId(Pageable pageable, Long userId);
 }
