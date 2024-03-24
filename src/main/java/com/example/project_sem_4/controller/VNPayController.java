@@ -1,7 +1,6 @@
 package com.example.project_sem_4.controller;
 
 import com.example.project_sem_4.service.VNPayService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +18,6 @@ import java.util.Map;
 @RequestMapping("/api/vnpay")
 public class VNPayController {
 
-    @Qualifier("VNPayService")
     @Autowired
     private VNPayService vnPayService;
 

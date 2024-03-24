@@ -70,9 +70,10 @@ public class OrderController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllOrders() {
+    public ResponseEntity<?> getAllOrders(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
         Pageable pageable = PageRequest.of(0,20);
-        Page<OrderDTO> orders = orderService.getAllOrders(pageable);
+        Page<OrderDTO> orders = orderService.getAllOrders(pageable, user.getId());
         DataRes res = new DataRes();
         res.setData(orders.getContent());
         res.setPagination(new Pagination(orders.getPageable().getPageNumber(), orders.getSize(), orders.getTotalElements()));

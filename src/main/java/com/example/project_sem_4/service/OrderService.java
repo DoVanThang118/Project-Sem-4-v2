@@ -17,6 +17,6 @@ public interface OrderService {
 
     void deleteOrder(Long id);
 
-    Page<OrderDTO> getAllOrders(Pageable pageable);
+    Page<OrderDTO> getAllOrders(Pageable pageable, Long user);
 
 }

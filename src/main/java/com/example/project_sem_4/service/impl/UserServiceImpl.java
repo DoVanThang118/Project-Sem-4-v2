@@ -2,6 +2,7 @@ package com.example.project_sem_4.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.example.project_sem_4.entity.Image;
+import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.entity.Role;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.UserDTO;
@@ -9,6 +10,7 @@ import com.example.project_sem_4.model.mapper.UserMapper;
 import com.example.project_sem_4.model.mapper.UserPageMapper;
 import com.example.project_sem_4.model.req.UserReq;
 import com.example.project_sem_4.repository.ImageRepository;
+import com.example.project_sem_4.repository.RestaurantRepository;
 import com.example.project_sem_4.repository.RoleRepository;
 import com.example.project_sem_4.repository.UserRepository;
 import com.example.project_sem_4.service.UserService;
@@ -31,12 +33,15 @@ public class UserServiceImpl implements UserService {
 
     private final ImageRepository imageRepository;
 
+    private final RestaurantRepository restaurantRepository;
+
     private final Cloudinary cloudinary;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ImageRepository imageRepository, Cloudinary cloudinary) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ImageRepository imageRepository, RestaurantRepository restaurantRepository, Cloudinary cloudinary) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.imageRepository = imageRepository;
+        this.restaurantRepository = restaurantRepository;
         this.cloudinary = cloudinary;
     }
 
@@ -66,6 +71,12 @@ public class UserServiceImpl implements UserService {
             roles.add(role);
             req.setRoles(roles);
         }
+
+        if (req.getRestaurantId() != null) {
+            Restaurant restaurant = restaurantRepository.findById(req.getRestaurantId()).orElseThrow(() -> new RuntimeException("restaurant not found"));
+            req.setRestaurant(restaurant);
+        }
+
         user = UserMapper.toUser(req);
         user.setStatus(1);
         userRepository.save(user);

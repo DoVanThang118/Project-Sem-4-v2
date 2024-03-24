@@ -90,8 +90,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDTO> getAllOrders(Pageable pageable) {
-        Page<Order> orders = orderRepository.findAll(pageable);
+    public Page<OrderDTO> getAllOrders(Pageable pageable, Long userId) {
+        Page<Order> orders = orderRepository.findAllByUserId(pageable, userId);
         return orders.map(OrderMapper.INSTANCE::mapEntityToDTO);
     }
 }

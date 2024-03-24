@@ -1,6 +1,7 @@
 package com.example.project_sem_4.repository;
 
 import com.example.project_sem_4.entity.Order;
+import com.example.project_sem_4.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findOrders(Pageable pageable, Long id, Long userId, Integer status);
 
     List<Order> findAllByRestaurantId(Long id);
+
+    @Query(value = "select o from Order o join o.users u " +
+            "where (:userId is null or u.id in (:userId))")
+    Page<Order> findAllByUserId(Pageable pageable, Long userId);
 }

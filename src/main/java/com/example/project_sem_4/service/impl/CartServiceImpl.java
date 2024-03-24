@@ -78,6 +78,7 @@ public class CartServiceImpl implements CartService {
 
         // Cập nhật tổng giá trị cho giỏ hàng
         cart.setSubTotal(cart.getSubTotal() + (product.getPrice() * req.getQty()));
+        cart.getCartItems().add(cartItem);
 
         // Lưu hoặc cập nhật thông tin giỏ hàng và mục giỏ hàng
         cartRepository.save(cart);
