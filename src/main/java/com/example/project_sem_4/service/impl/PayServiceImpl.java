@@ -29,24 +29,25 @@ public class PayServiceImpl implements PayService {
     @Override
     public PayRes makePayment(OrderDTO orderDTO) {
 
-        if ("vnpay".equals(orderDTO.getPaymentMethod()) ) {
-            PayRes res = new PayRes();
-            res.setMessageCode("200");
-            res.setUrl(vnPayService.createOrder(orderDTO));
-            res.setMessage("Request successfully fulfilled");
-            return res;
-
-        } else if ("paypal".equals(orderDTO.getPaymentMethod())) {
-            PayRes res = new PayRes();
-            res.setMessageCode("200");
-            res.setMessage("Request successfully fulfilled");
-            res.setUrl(paypalService.getLinksPayment(orderDTO));
-            return res;
-        } else {
-            PayRes res = new PayRes();
-            res.setMessageCode("400");
-            res.setMessage("Invalid Payment Method");
-            return res;
-        }
+//        if ("vnpay".equals(orderDTO.getPaymentMethod()) ) {
+//            PayRes res = new PayRes();
+//            res.setMessageCode("200");
+//            res.setUrl(vnPayService.createOrder(orderDTO));
+//            res.setMessage("Request successfully fulfilled");
+//            return res;
+//
+//        } else if ("paypal".equals(orderDTO.getPaymentMethod())) {
+//            PayRes res = new PayRes();
+//            res.setMessageCode("200");
+//            res.setMessage("Request successfully fulfilled");
+//            res.setUrl(paypalService.getLinksPayment(orderDTO));
+//            return res;
+//        } else {
+//            PayRes res = new PayRes();
+//            res.setMessageCode("400");
+//            res.setMessage("Invalid Payment Method");
+//            return res;
+//        }
+        return null;
     }
 }
