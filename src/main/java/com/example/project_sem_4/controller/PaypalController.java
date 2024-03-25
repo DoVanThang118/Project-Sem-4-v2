@@ -18,24 +18,8 @@ public class PaypalController {
     @Autowired
     private PaypalService paypalService;
 
-    public static final String SUCCESS_URL = "pay";
-    public static final String CANCEL_URL = "pay/cancel";
-
-    @PostMapping("/pay")
-    public ResponseEntity<String> payment(@RequestBody Order order) {
-        try {
-            Payment payment = paypalService.createPayment(order.getTotalMoney(), order.getName(), "http://localhost:3000/" + CANCEL_URL,
-                    "http://localhost:3000/" + SUCCESS_URL);
-            for(Links link:payment.getLinks()) {
-                if(link.getRel().equals("approval_url")) {
-                    return ResponseEntity.status(HttpStatus.OK).body(link.getHref());
-                }
-            }
-        } catch (PayPalRESTException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Payment creation failed.");
-    }
+    public static final String SUCCESS_URL = "/success";
+    public static final String CANCEL_URL = "/cancel";
 
     @GetMapping(value = CANCEL_URL)
     public String cancelPay() {

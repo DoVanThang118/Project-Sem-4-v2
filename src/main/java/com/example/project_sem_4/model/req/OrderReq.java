@@ -4,6 +4,7 @@ import com.example.project_sem_4.entity.Cart;
 import com.example.project_sem_4.entity.OrderDetail;
 import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.entity.User;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,9 @@ public class OrderReq {
     private String address;
 
     private String phone;
+
+//    @Pattern(regexp = "^(vnpay|paypal)$", message = "Invalid payment method. Allowed values are 'VNPay' or 'Paypal'")
+//    private String paymentMethod;
 
 
     private Set<User> users;

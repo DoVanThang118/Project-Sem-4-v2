@@ -2,7 +2,6 @@ package com.example.project_sem_4.service.impl;
 
 import com.example.project_sem_4.entity.*;
 import com.example.project_sem_4.model.dto.OrderDTO;
-import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.OrderMapper;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.repository.CartRepository;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.*;

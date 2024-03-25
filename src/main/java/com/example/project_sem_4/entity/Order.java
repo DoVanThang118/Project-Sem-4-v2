@@ -36,6 +36,7 @@ public class Order {
 
     private String address;
 
+//    private String paymentMethod;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(

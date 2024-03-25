@@ -1,4 +1,4 @@
-package com.example.project_sem_4.config;
+package com.example.project_sem_4.config.paypal;
 
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
@@ -21,20 +21,20 @@ public class PaypalConfig {
 
     @Bean
     public Map<String, String> paypalSdkConfig() {
-        Map<String, String> configMap = new HashMap<>();
-        configMap.put("mode", mode);
-        return configMap;
+        Map<String, String> sdkConfig = new HashMap<>();
+        sdkConfig.put("mode", mode);
+        return sdkConfig;
     }
 
     @Bean
-    public OAuthTokenCredential oAuthTokenCredential() {
+    public OAuthTokenCredential authTokenCredential() {
         return new OAuthTokenCredential(clientId, clientSecret, paypalSdkConfig());
     }
 
     @Bean
     public APIContext apiContext() throws PayPalRESTException {
-        APIContext context = new APIContext(oAuthTokenCredential().getAccessToken());
-        context.setConfigurationMap(paypalSdkConfig());
-        return context;
+        APIContext apiContext = new APIContext(authTokenCredential().getAccessToken());
+        apiContext.setConfigurationMap(paypalSdkConfig());
+        return apiContext;
     }
 }

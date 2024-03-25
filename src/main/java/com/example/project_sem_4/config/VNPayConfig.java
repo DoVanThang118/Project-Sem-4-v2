@@ -17,16 +17,16 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 public class VNPayConfig {
     public static final String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static final String vnp_Returnurl = "/homestay-booking/detail/payment-status";
-    public static final String vnp_TmnCode = "4BCUR1O5";
-    public static final String vnp_HashSecret = "IEKVELDHYQFTSFBXQUOQFRFFSPDYIHHS";
+    public static final String vnp_Return_Url = "http://localhost:3000/thank-you";
+    public static final String vnp_TmnCode = "S0RBAZ6T";
+    public static final String vnp_HashSecret = "EHOFRQAGDDUVWTLWBLTYTKZHGLCZBIIB";
     public static final String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
     public static final String vnp_Version = "2.1.0";
     public static final String vnp_Command = "pay";
     public static final String vnp_OrderType = "170000";
     public static final String vnp_CurrCode = "VND";
     public static final String vnp_Locale = "vn";
-    public static final String vnp_OrderInfo = "Thanh toan dat phong ";
+    public static final String vnp_OrderInfo = "Thanh toan don hang";
     public static final int timeout = 15; //minute
     public static final String vnp_IpAddr = "0:0:0:0:0:0:0:1";
 
@@ -134,7 +134,8 @@ public class VNPayConfig {
         }
     }
 
-    public static String getIpAddress(HttpServletRequest request) {
+    public static String getIpAddress() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ipAdress;
         try {
             ipAdress = request.getHeader("X-FORWARDED-FOR");

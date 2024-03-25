@@ -29,6 +29,8 @@ public class OrderDTO {
 
     private String phone;
 
+//    private String paymentMethod;
+
     private RestaurantDTO restaurant;
 
     private Set<UserDTO> users;
