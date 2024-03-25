@@ -1,5 +1,6 @@
 package com.example.project_sem_4.controller;
 
+import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.UserDTO;
 import com.example.project_sem_4.model.req.AuthReq;
 import com.example.project_sem_4.model.req.UserReq;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -114,8 +116,15 @@ public class UserController {
     }
 
     @PutMapping("/api/users/{id}")
-    public ResponseEntity<?> updateUser(@ModelAttribute UserReq req, @PathVariable Long id) throws IOException {
+    public ResponseEntity<?> updateUser(@RequestBody UserReq req, @PathVariable Long id) throws IOException {
         UserDTO result = userService.updateUser(req, id);
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/api/users/avatar")
+    public ResponseEntity<?> updateAvatar(@RequestParam("file") MultipartFile file, Authentication authentication) throws IOException {
+        User user = userService.findByEmail(authentication.getName());
+        UserDTO result = userService.updateAvatar(file, user.getId());
         return ResponseEntity.ok(result);
     }
 

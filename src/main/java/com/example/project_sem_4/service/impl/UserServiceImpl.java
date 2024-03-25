@@ -6,6 +6,7 @@ import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.entity.Role;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.UserDTO;
+import com.example.project_sem_4.model.mapper.ImageMapper;
 import com.example.project_sem_4.model.mapper.UserMapper;
 import com.example.project_sem_4.model.mapper.UserPageMapper;
 import com.example.project_sem_4.model.req.UserReq;
@@ -86,36 +87,58 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserReq req, Long id) throws IOException {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new RuntimeException("Not Found User");
-        }
-        req.setId(id);
-        if (req.getImg() != null) {
-            req.setImages(new HashSet<>());
-            Set<Image> files = new HashSet<>();
-            for (MultipartFile file : req.getImg()) {
-                Image imageReq = new Image();
-                String url = cloudinary.uploader().upload(
-                                file.getBytes(),
-                                Map.of("public_id", UUID.randomUUID().toString()))
-                        .get("url").toString();
-                imageReq.setUrl(url);
-                imageReq.setStatus(1);
-                Image image = imageRepository.save(imageReq);
-                files.add(image);
-            }
-            req.setImages(files);
-        }
-        User update = UserMapper.toUser(req);
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setName(req.getName());
+        user.setEmail(req.getEmail());
+        user.setAddress(req.getAddress());
+        user.setTel(req.getTel());
+        user.setBirthday(req.getBirthday());
+
+//        if (req.getImg() != null) {
+//            req.setImages(new HashSet<>());
+//            Set<Image> files = new HashSet<>();
+//            for (MultipartFile file : req.getImg()) {
+//                Image imageReq = new Image();
+//                String url = cloudinary.uploader().upload(
+//                                file.getBytes(),
+//                                Map.of("public_id", UUID.randomUUID().toString()))
+//                        .get("url").toString();
+//                imageReq.setUrl(url);
+//                imageReq.setStatus(1);
+//                Image image = imageRepository.save(imageReq);
+//                files.add(image);
+//            }
+//            req.setImages(files);
+//        }
+//        User update = UserMapper.toUser(req);
         try {
-            userRepository.save(update);
+            userRepository.save(user);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException("Database error. Can't update user");
         }
+        return UserMapper.userDto(user);
+    }
 
-        return UserMapper.userDto(update);
+    @Override
+    public UserDTO updateAvatar(MultipartFile file, Long id) throws IOException {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        Set<Image> files = new HashSet<>();
+        Image imageReq = new Image();
+        String url = cloudinary.uploader().upload(
+                        file.getBytes(),
+                        Map.of("public_id", UUID.randomUUID().toString()))
+                .get("url").toString();
+        imageReq.setUrl(url);
+        imageReq.setStatus(1);
+        Image image = imageRepository.save(imageReq);
+        files.add(image);
+
+        user.setImages(files);
+        userRepository.save(user);
+
+        return UserMapper.userDto(user);
     }
 
     @Override

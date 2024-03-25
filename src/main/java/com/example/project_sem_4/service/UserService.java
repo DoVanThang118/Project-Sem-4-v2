@@ -7,6 +7,7 @@ import com.example.project_sem_4.model.req.UserReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -26,4 +27,6 @@ public interface UserService {
     User findByEmail(String name);
 
     Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Integer status);
+
+    UserDTO updateAvatar(MultipartFile file, Long id) throws IOException;
 }

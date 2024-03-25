@@ -48,8 +48,7 @@ public class UserMapper {
         User user = modelMapper.map(req, User.class);
 
         // Bảo mật mật khẩu bằng cách hash bằng BCrypt
-        String hashedPassword = new BCryptPasswordEncoder(12).encode(user.getPassword());
-        user.setPassword(hashedPassword);
+        user.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
 
         return user;
     }
