@@ -96,8 +96,11 @@ public class OrderServiceImpl implements OrderService {
         if (req.getStatus() != null) {
             order.setStatus(req.getStatus());
         }
-        User shipper = userRepository.findById(req.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found"));
-        order.getUsers().add(shipper);
+        if (req.getShipperId() != null) {
+            User shipper = userRepository.findById(req.getShipperId()).orElseThrow(() -> new RuntimeException("Shipper not found"));
+            order.getUsers().add(shipper);
+        }
+
 
         order.getUsers().add(user);
         orderRepository.save(order);

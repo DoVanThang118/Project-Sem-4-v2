@@ -107,6 +107,7 @@ public class UserController {
                 req.getAddress(),
                 req.getBirthday(),
                 req.getType(),
+                req.getRestaurantId(),
                 req.getStatus()
         );
         DataRes res = new DataRes();

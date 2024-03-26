@@ -164,8 +164,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Integer status) {
-        Page<User> users = userRepository.findUsers(pageable, id, name, email, tel ,address, birthday, type, status);
+    public Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Long restaurantId, Integer status) {
+        Page<User> users = userRepository.findUsers(pageable, id, name, email, tel ,address, birthday, type, restaurantId, status);
         return users.map(UserPageMapper.INSTANCE::mapEntityToDTO);
     }
 }

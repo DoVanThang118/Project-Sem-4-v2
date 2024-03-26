@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public User findByEmail(String email);
 
     @Query(value = "select u from User u " +
+            "join u.restaurant r " +
             "WHERE (:id is null OR u.id in (:id)) " +
             "and (:name is null or u.name like %:name%) " +
             "and (:email is null or u.email like %:email%) " +
@@ -22,7 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "and (:address is null or u.address like %:address%) " +
             "and (:birthday is null or u.birthday = :birthday) " +
             "and (:type is null or u.type like %:type%) " +
+            "and (:restaurantId is null or r.id in (:restaurantId)) " +
             "and (:status is null or u.status in (:status)) "
     )
-    Page<User> findUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Integer status);
+    Page<User> findUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Long restaurantId, Integer status);
 }
