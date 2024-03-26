@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -19,7 +20,7 @@ public class Order {
     private Long id;
 
     @Column(name = "create_date")
-    private Timestamp createDate;
+    private LocalDateTime createDate;
 
     @Column(name = "total_money")
     private Double totalMoney;

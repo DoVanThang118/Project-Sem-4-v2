@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -43,8 +44,7 @@ public class OrderServiceImpl implements OrderService {
         Cart cart = cartRepository.findById(req.getCartId()).orElseThrow(() -> new RuntimeException("Cart not found"));
 
         Order order = OrderMapper.INSTANCE.mapReqToEntity(req);
-        Date date = new Date();
-        Timestamp ts = new Timestamp(date.getTime());
+        LocalDateTime ts = LocalDateTime.now();
         order.setCreateDate(ts);
         order.setTotalMoney(cart.getSubTotal());
         order.getUsers().add(user);

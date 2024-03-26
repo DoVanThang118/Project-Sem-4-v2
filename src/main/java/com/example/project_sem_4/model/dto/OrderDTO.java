@@ -1,8 +1,9 @@
 package com.example.project_sem_4.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -17,7 +18,8 @@ public class OrderDTO {
 
     private String email;
 
-    private Timestamp createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime createDate;
 
     private Double totalMoney;
 
