@@ -27,6 +27,10 @@ public class CustomUserDetails implements UserDetails {
         return authorities;
     }
 
+    public Long getId() {
+        return user.getId();
+    }
+
 //    private Set<SimpleGrantedAuthority> getAuthority(User user) {
 //        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 //        user.getRoles().forEach(role -> {
