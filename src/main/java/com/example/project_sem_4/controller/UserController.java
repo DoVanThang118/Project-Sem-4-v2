@@ -84,7 +84,6 @@ public class UserController {
     }
 
     @GetMapping("/api/users")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllUsers() {
         Pageable pageable = PageRequest.of(0,20);
         Page<UserDTO> users = userService.getAllUsers(pageable);
@@ -95,7 +94,6 @@ public class UserController {
     }
 
     @PostMapping("/api/users/list")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getUsers(@RequestBody UserReq req) throws ParseException {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<UserDTO> page = userService.getUsers(
@@ -130,7 +128,6 @@ public class UserController {
     }
 
     @DeleteMapping("/api/users/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("Delete Success");
