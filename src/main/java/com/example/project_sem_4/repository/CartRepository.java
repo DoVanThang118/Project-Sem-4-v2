@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
@@ -36,4 +37,17 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     void deleteAllByUserId(Long userId);
 
     Cart findByRestaurantId(Long restaurantId);
+
+    @Query(value = "select c from Cart c join c.restaurant r join c.user u " +
+            "where (:userId is null or u.id in (:userId)) " +
+            "and (:restaurantId is null or r.id in (:restaurantId)) "
+    )
+    Cart findByRestaurantIdAndUserId(Long restaurantId, Long userId);
+
+
+    @Query(value = "select c from Cart c join c.user u " +
+            "where (:userId is null or u.id in (:userId)) " +
+            "and (:id is null or c.id in (:id)) "
+    )
+    Optional<Cart> findByIdAndUserId(Long id, Long userId);
 }

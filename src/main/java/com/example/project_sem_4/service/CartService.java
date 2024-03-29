@@ -15,7 +15,7 @@ public interface CartService {
 
     Page<CartDTO> findCarts(Pageable pageable, Long id, Integer status, Long restaurantId, Long userId);
 
-    void deleteCart(Long id);
+    void deleteCart(Long id, User user);
 
     Page<CartDTO> getCarts(Pageable pageable, Long userId);
 }

@@ -46,8 +46,9 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCart(@PathVariable Long id) {
-        cartService.deleteCart(id);
+    public ResponseEntity<?> deleteCart(@PathVariable Long id, Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        cartService.deleteCart(id, user);
         return ResponseEntity.ok("Delete Success");
     }
 

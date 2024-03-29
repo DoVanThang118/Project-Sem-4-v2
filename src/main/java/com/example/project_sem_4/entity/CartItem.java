@@ -26,9 +26,13 @@ public class CartItem {
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 //
     public Double getTotal() {
         total = product.getPrice() * qty;

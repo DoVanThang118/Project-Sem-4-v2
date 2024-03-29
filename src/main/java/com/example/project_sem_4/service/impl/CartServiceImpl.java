@@ -52,7 +52,8 @@ public class CartServiceImpl implements CartService {
 
         req.setStatus(req.getStatus() == null ? 1 : req.getStatus());
 
-        Cart cart = cartRepository.findByRestaurantId(req.getRestaurantId());
+//        Cart cart = cartRepository.findByRestaurantId(req.getRestaurantId());
+        Cart cart = cartRepository.findByRestaurantIdAndUserId(req.getRestaurantId(), user.getId());
         if (cart == null) {
             cart = new Cart();
             cart.setRestaurant(restaurant);
@@ -61,7 +62,8 @@ public class CartServiceImpl implements CartService {
             cart.setSubTotal(0.0); // Khởi tạo tổng giá trị cho giỏ hàng mới
         }
 
-        CartItem cartItem = cartItemRepository.findByProductId(req.getProductId());
+//        CartItem cartItem = cartItemRepository.findByProductId(req.getProductId());
+        CartItem cartItem = cartItemRepository.findByProductIdAndUserId(req.getProductId(), user.getId());
         if (cartItem != null) {
             // Sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng và tổng giá
             cartItem.setQty(cartItem.getQty() + req.getQty());
@@ -70,6 +72,7 @@ public class CartServiceImpl implements CartService {
             // Sản phẩm chưa có trong giỏ hàng, tạo mới một mục giỏ hàng
             cartItem = new CartItem();
             cartItem.setCart(cart);
+            cartItem.setUser(user);
             cartItem.setStatus(1);
             cartItem.setProduct(product);
             cartItem.setQty(req.getQty());
@@ -94,13 +97,10 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteCart(Long id) {
-        Optional<Cart> cart = cartRepository.findById(id);
-        if (cart.isEmpty()) {
-            throw new RuntimeException("Not found cart has id = " + id);
-        }
+    public void deleteCart(Long id, User user) {
+        Cart cart = cartRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() -> new RuntimeException("Cart not found"));
         try {
-            cartRepository.delete(cart.get());
+            cartRepository.delete(cart);
         } catch (Exception e) {
             throw new RuntimeException("Database error. Can't delete Cart");
         }
