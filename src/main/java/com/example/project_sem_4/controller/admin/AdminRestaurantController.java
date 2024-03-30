@@ -54,14 +54,14 @@ public class AdminRestaurantController {
     }
 
     @GetMapping("total_revenue")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getTotalRevenue() {
         Double total = restaurantService.totalRevenue();
         return ResponseEntity.ok(total);
     }
 
     @PostMapping("/list")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getRestaurants(@RequestBody RestaurantReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<RestaurantDTO> page = restaurantService.getRestaurant(
@@ -85,7 +85,7 @@ public class AdminRestaurantController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getAllRestaurants() {
         Pageable pageable = PageRequest.of(0,20);
         Page<RestaurantDTO> restaurants = restaurantService.getAllRestaurants(pageable);

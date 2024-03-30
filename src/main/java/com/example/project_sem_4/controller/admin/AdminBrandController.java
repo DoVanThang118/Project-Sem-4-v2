@@ -31,7 +31,7 @@ public class AdminBrandController {
     private BrandService brandService;
 
     @PostMapping("/list")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getBrand(@RequestBody BrandReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<BrandDTO> page = brandService.getBrand(
@@ -50,7 +50,7 @@ public class AdminBrandController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getAllBrands() {
         Pageable pageable = PageRequest.of(0,20);
         Page<BrandDTO> brands = brandService.getAllBrands(pageable);

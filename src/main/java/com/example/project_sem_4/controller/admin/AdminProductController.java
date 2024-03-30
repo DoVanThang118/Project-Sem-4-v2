@@ -56,7 +56,7 @@ public class AdminProductController {
     }
 
     @PostMapping("/list")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getProducts(@RequestBody ProductReq req, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
@@ -79,7 +79,7 @@ public class AdminProductController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> getAllProducts(Authentication authentication) {
         Pageable pageable = PageRequest.of(0,20);
         Page<ProductDTO> products = productService.getAllProducts(pageable);

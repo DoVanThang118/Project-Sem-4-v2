@@ -45,9 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
 
-        if (req.getStatus() == null) {
-            req.setStatus(1);
-        }
+        req.setStatus(req.getStatus() == null ? 1 : req.getStatus());
 
         if (req.getImg() == null && req.getImages() != null) {
             req.setImg(null);
@@ -70,6 +68,46 @@ public class CategoryServiceImpl implements CategoryService {
         }
         Category category = CategoryMapper.INSTANCE.mapReqToEntity(req);
         categoryRepository.save(category);
+        return CategoryMapper.INSTANCE.mapEntityToDTO(category);
+    }
+
+    @Override
+    public CategoryDTO updateCategory(CategoryReq req, Long id) throws IOException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        if (req.getName() != null) {
+            category.setName(req.getName());
+        }
+        if (req.getDescription() != null) {
+            category.setDescription(req.getDescription());
+        }
+        if (req.getStatus() != null) {
+            category.setStatus(req.getStatus());
+        }
+        categoryRepository.save(category);
+
+        return CategoryMapper.INSTANCE.mapEntityToDTO(category);
+    }
+
+    @Override
+    public CategoryDTO updateAvatar(CategoryReq req, Long id) throws IOException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+
+        Set<Image> files = new HashSet<>();
+        for (MultipartFile file : req.getImg()) {
+            Image imageReq = new Image();
+            String url = cloudinary.uploader().upload(
+                            file.getBytes(),
+                            Map.of("public_id", UUID.randomUUID().toString()))
+                    .get("url").toString();
+            imageReq.setUrl(url);
+            imageReq.setTitle(req.getName());
+            imageReq.setStatus(1);
+            Image image = imageRepository.save(imageReq);
+            files.add(image);
+        }
+        category.setImages(files);
+        categoryRepository.save(category);
+
         return CategoryMapper.INSTANCE.mapEntityToDTO(category);
     }
 
