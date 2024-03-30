@@ -1,6 +1,8 @@
 package com.example.project_sem_4.controller;
 
+import com.example.project_sem_4.model.dto.BrandDTO;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
+import com.example.project_sem_4.model.req.BrandReq;
 import com.example.project_sem_4.model.req.RestaurantReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
@@ -24,28 +26,6 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantService restaurantService;
-
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> saveRestaurant(@ModelAttribute RestaurantReq req) throws IOException {
-        RestaurantDTO create = restaurantService.createRestaurant(req);
-        return ResponseEntity.ok(create);
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateRestaurant(@ModelAttribute RestaurantReq req, @PathVariable Long id) throws IOException {
-        req.setId(id);
-        RestaurantDTO update = restaurantService.createRestaurant(req);
-        return new ResponseEntity<>(update, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteRestaurant(@PathVariable Long id) {
-        restaurantService.deleteRestaurant(id);
-        return ResponseEntity.ok("Delete Success");
-    }
 
     @PostMapping("/list")
     public ResponseEntity<?> getRestaurants(@RequestBody RestaurantReq req) {

@@ -59,9 +59,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             brand.ifPresent(req::setBrand);
         }
 
-        if (req.getStatus() == null) {
-            req.setStatus(1);
-        }
+        req.setStatus(req.getStatus() == null ? 1 : req.getStatus());
 
         if (req.getImg() != null) {
             Set<Image> files = new HashSet<>();
@@ -80,6 +78,70 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         Restaurant restaurant = RestaurantMapper.INSTANCE.mapReqToEntity(req);
         restaurantRepository.save(restaurant);
+        return RestaurantMapper.INSTANCE.mapEntityToDTO(restaurant);
+    }
+
+    @Override
+    public RestaurantDTO updateRestaurant(RestaurantReq req, Long id) throws IOException {
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RuntimeException("restaurant not found"));
+        if (req.getName() != null) {
+            restaurant.setName(req.getName());
+        }
+        if (req.getTel() != null) {
+            restaurant.setTel(req.getTel());
+        }
+        if (req.getMeals() != null) {
+            restaurant.setMeals(req.getMeals());
+        }
+        if (req.getCuisines() != null) {
+            restaurant.setCuisines(req.getCuisines());
+        }
+        if (req.getRate() != null) {
+            restaurant.setRate(req.getRate());
+        }
+        if (req.getHourStart() != null) {
+            restaurant.setHourStart(req.getHourStart());
+        }
+        if (req.getHourEnd() != null) {
+            restaurant.setHourEnd(req.getHourEnd());
+        }
+        if (req.getAddress() != null) {
+            restaurant.setAddress(req.getAddress());
+        }
+        if (req.getDescription() != null) {
+            restaurant.setDescription(req.getDescription());
+        }
+        if (req.getStatus() != null) {
+            restaurant.setStatus(req.getStatus());
+        }
+        if (req.getBrandId() != null) {
+            Optional<Brand> brand = brandRepository.findById(req.getBrandId());
+            brand.ifPresent(restaurant::setBrand);
+        }
+        restaurantRepository.save(restaurant);
+        return RestaurantMapper.INSTANCE.mapEntityToDTO(restaurant);
+    }
+
+    @Override
+    public RestaurantDTO updateAvatar(RestaurantReq req, Long id) throws IOException {
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RuntimeException("restaurant not found"));
+
+        Set<Image> files = new HashSet<>();
+        for (MultipartFile file : req.getImg()) {
+            Image imageReq = new Image();
+            String url = cloudinary.uploader().upload(
+                            file.getBytes(),
+                            Map.of("public_id", UUID.randomUUID().toString()))
+                    .get("url").toString();
+            imageReq.setUrl(url);
+            imageReq.setTitle(req.getName());
+            imageReq.setStatus(1);
+            Image image = imageRepository.save(imageReq);
+            files.add(image);
+        }
+        restaurant.setImages(files);
+        restaurantRepository.save(restaurant);
+
         return RestaurantMapper.INSTANCE.mapEntityToDTO(restaurant);
     }
 

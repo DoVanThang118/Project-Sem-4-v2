@@ -1,5 +1,6 @@
 package com.example.project_sem_4.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalTime;
@@ -26,8 +27,10 @@ public class RestaurantDTO {
 
     private Double rate;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime hourStart;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime hourEnd;
 
     private String address;
