@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,8 +32,8 @@ public class BrandServiceImpl implements BrandService {
     private Cloudinary cloudinary;
 
     @Override
-    public Page<BrandDTO> getBrand(Pageable pageable, Long id, String name, String description, String hotline, String email) {
-        Page<Brand> brands = brandRepository.findBrands(pageable, id, name, description, hotline, email);
+    public Page<BrandDTO> getBrand(Pageable pageable, Long id, String name, String description, String hotline, String email, Integer status) {
+        Page<Brand> brands = brandRepository.findBrands(pageable, id, name, description, hotline, email, status);
         return brands.map(BrandMapper.INSTANCE::mapEntityToDTO);
     }
 
@@ -53,6 +54,8 @@ public class BrandServiceImpl implements BrandService {
                 throw new RuntimeException("Brand is already in use");
             }
         }
+        req.setStatus(req.getStatus() == null ? 1 : req.getStatus());
+
         if (req.getImg() != null) {
             req.setImages(new HashSet<>());
             Set<Image> files = new HashSet<>();
@@ -75,77 +78,55 @@ public class BrandServiceImpl implements BrandService {
         return BrandMapper.INSTANCE.mapEntityToDTO(brand);
     }
 
-//    @Override
-//    public BrandDTO saveBrand(BrandReq req) throws IOException {
-//        if (req == null) {
-//            throw new IllegalArgumentException("Request is null");
-//        }
-//
-//        Brand brand = brandRepository.findByName(req.getName());
-//        if (brand != null) {
-//            throw new RuntimeException("Brand is already in use");
-//        }
-//
-//        brand = new Brand();
-//        brand.setName(req.getName());
-//        brand.setEmail(req.getEmail());
-//        brand.setHotline(req.getHotline());
-//        brand.setDescription(req.getDescription());
-//        brandRepository.save(brand);
-//
-//
-//        if (req.getImg() != null) {
-//            List<Image> images = new ArrayList<>();
-//            for (MultipartFile file : req.getImg()) {
-//                String url = cloudinary.uploader().upload(file.getBytes(),
-//                                Map.of("public_id", UUID.randomUUID().toString()))
-//                        .get("url").toString();
-//                Image image = new Image();
-//                image.setBrand(brand);
-//                image.setUrl(url);
-//                image.setTitle(req.getName());
-//                image.setStatus(1);
-//                imageRepository.save(image);
-//                images.add(image);
-//            }
-//            brand.setImages(images);
-//        }
-//
-//        return BrandMapper.INSTANCE.mapEntityToDTO(brand);
-//    }
+    @Override
+    public BrandDTO updateBrand(BrandReq req, Long id) throws IOException {
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
+        if (req.getName() != null) {
+            brand.setName(req.getName());
+        }
+        if (req.getDescription() != null) {
+            brand.setDescription(req.getDescription());
+        }
+        if (req.getHotline() != null) {
+            brand.setHotline(req.getHotline());
+        }
+        if (req.getEmail() != null) {
+            brand.setEmail(req.getEmail());
+        }
+        if (req.getStatus() != null) {
+            brand.setStatus(req.getStatus());
+        }
+        try {
+            brandRepository.save(brand);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException("Database error. Can't update Brand");
+        }
+        return BrandMapper.INSTANCE.mapEntityToDTO(brand);
+    }
 
-//    @Override
-//    public BrandDTO updateBrand(BrandReq req, Set<MultipartFile> files, Long id) throws IOException {
-//        Brand brand = brandRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
-//
-//        if (files != null) {
-//            Set<Image> images = brand.getImages();
-//            brand.getImages().clear();
-//            imageRepository.deleteAll(images);
-//
-//            brand.setImages(new HashSet<>());
-//            Set<Image> i = new HashSet<>();
-//            for (MultipartFile file : req.getImg()) {
-//                Image imageReq = new Image();
-//                String url = cloudinary.uploader().upload(
-//                                file.getBytes(),
-//                                Map.of("public_id", UUID.randomUUID().toString()))
-//                        .get("url").toString();
-//                imageReq.setUrl(url);
-//                imageReq.setTitle(req.getName());
-//                imageReq.setStatus(1);
-//                Image image = imageRepository.save(imageReq);
-//                i.add(image);
-//            }
-//            req.setImages(i);
-//        }
-//        brand.setName(req.getName());
-//        brand.setEmail(req.getEmail());
-//        brand.setHotline(req.getHotline());
-//        brand.setDescription(req.getDescription());
-//        brandRepository.save(brand);
-//        return BrandMapper.INSTANCE.mapEntityToDTO(brand);
-//    }
+    @Override
+    public BrandDTO updateAvatar(BrandReq req, Long id) throws IOException {
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
+
+        Set<Image> files = new HashSet<>();
+        for (MultipartFile file : req.getImg()) {
+            Image imageReq = new Image();
+            String url = cloudinary.uploader().upload(
+                            file.getBytes(),
+                            Map.of("public_id", UUID.randomUUID().toString()))
+                    .get("url").toString();
+            imageReq.setUrl(url);
+            imageReq.setTitle(req.getName());
+            imageReq.setStatus(1);
+            Image image = imageRepository.save(imageReq);
+            files.add(image);
+        }
+        brand.setImages(files);
+        brandRepository.save(brand);
+
+        return BrandMapper.INSTANCE.mapEntityToDTO(brand);
+    }
 
     @Override
     public void deleteBrand(Long id) {

@@ -20,8 +20,10 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
             "AND (:name IS NULL OR b.name LIKE %:name%) " +
             "AND (:description IS NULL OR b.description LIKE %:description%) " +
             "AND (:hotline IS NULL OR b.hotline LIKE %:hotline%) " +
-            "AND (:email IS NULL OR b.email LIKE %:email%)")
-    Page<Brand> findBrands(Pageable pageable,Long id, String name, String description, String hotline, String email);
+            "AND (:email IS NULL OR b.email LIKE %:email%) " +
+            "AND (:status IS NULL OR b.status in (:status)) "
+    )
+    Page<Brand> findBrands(Pageable pageable,Long id, String name, String description, String hotline, String email, Integer status);
 
     Brand findByName(String name);
 }

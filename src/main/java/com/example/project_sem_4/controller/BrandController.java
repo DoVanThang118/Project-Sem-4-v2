@@ -27,7 +27,6 @@ public class BrandController {
     private BrandService brandService;
 
     @PostMapping("/list")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getBrand(@RequestBody BrandReq req) {
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<BrandDTO> page = brandService.getBrand(
@@ -36,7 +35,8 @@ public class BrandController {
                 req.getName(),
                 req.getDescription(),
                 req.getHotline(),
-                req.getEmail()
+                req.getEmail(),
+                req.getStatus()
         );
         DataRes res = new DataRes();
         res.setData(page.getContent());
@@ -45,7 +45,6 @@ public class BrandController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllBrands() {
         Pageable pageable = PageRequest.of(0,20);
         Page<BrandDTO> brands = brandService.getAllBrands(pageable);
@@ -53,27 +52,5 @@ public class BrandController {
         res.setData(brands.getContent());
         res.setPagination(new Pagination(brands.getPageable().getPageNumber(), brands.getSize(), brands.getTotalElements()));
         return ResponseEntity.ok(res);
-    }
-
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> saveBrand(@ModelAttribute BrandReq req) throws IOException {
-        BrandDTO create = brandService.saveBrand(req);
-        return ResponseEntity.ok(create);
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateBrand(@ModelAttribute BrandReq req, @PathVariable Long id) throws IOException {
-        req.setId(id);
-        BrandDTO update = brandService.saveBrand(req);
-        return new ResponseEntity<>(update, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteBrand(@PathVariable Long id) {
-        brandService.deleteBrand(id);
-        return ResponseEntity.ok("Delete Success");
     }
 }

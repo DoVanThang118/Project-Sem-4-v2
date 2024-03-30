@@ -3,6 +3,7 @@ package com.example.project_sem_4.controller;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.UserDTO;
 import com.example.project_sem_4.model.req.AuthReq;
+import com.example.project_sem_4.model.req.BrandReq;
 import com.example.project_sem_4.model.req.UserReq;
 import com.example.project_sem_4.model.res.AuthRes;
 import com.example.project_sem_4.config.JwtTokenUtil;
@@ -114,6 +115,14 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/api/users/profile")
+    public ResponseEntity<?> getProfile(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        UserDTO res = userService.getProfile(user.getId());
+
+        return ResponseEntity.ok(res);
+    }
+
     @PutMapping("/api/users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody UserReq req, @PathVariable Long id) throws IOException {
         UserDTO result = userService.updateUser(req, id);
@@ -121,9 +130,9 @@ public class UserController {
     }
 
     @PutMapping("/api/users/avatar")
-    public ResponseEntity<?> updateAvatar(@RequestParam("file") MultipartFile file, Authentication authentication) throws IOException {
+    public ResponseEntity<?> updateAvatar(@ModelAttribute UserReq req, Authentication authentication) throws IOException {
         User user = userService.findByEmail(authentication.getName());
-        UserDTO result = userService.updateAvatar(file, user.getId());
+        UserDTO result = userService.updateAvatar(req, user.getId());
         return ResponseEntity.ok(result);
     }
 

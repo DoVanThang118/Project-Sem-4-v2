@@ -25,6 +25,8 @@ public class Brand {
 
     private String email;
 
+    private Integer status;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "brands_images",

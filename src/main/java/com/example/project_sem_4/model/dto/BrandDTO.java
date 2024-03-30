@@ -20,5 +20,7 @@ public class BrandDTO {
 
     private String email;
 
+    private Integer status;
+
     private Set<ImageDTO> images;
 }

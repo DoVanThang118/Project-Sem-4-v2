@@ -25,6 +25,8 @@ public class BrandReq {
 
     private String email;
 
+    private Integer status;
+
     //
     private Set<MultipartFile> img;
     private Set<Image> images;

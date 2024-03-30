@@ -1,7 +1,9 @@
 package com.example.project_sem_4.controller.admin;
 
 
+import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.BrandDTO;
+import com.example.project_sem_4.model.dto.UserDTO;
 import com.example.project_sem_4.model.req.BrandReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
@@ -14,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -36,7 +40,8 @@ public class AdminBrandController {
                 req.getName(),
                 req.getDescription(),
                 req.getHotline(),
-                req.getEmail()
+                req.getEmail(),
+                req.getStatus()
         );
         DataRes res = new DataRes();
         res.setData(page.getContent());
@@ -64,10 +69,17 @@ public class AdminBrandController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateBrand(@ModelAttribute BrandReq req, @PathVariable Long id) throws IOException {
+    public ResponseEntity<?> updateBrand(@RequestBody BrandReq req, @PathVariable Long id) throws IOException {
         req.setId(id);
-        BrandDTO update = brandService.saveBrand(req);
+        BrandDTO update = brandService.updateBrand(req, id);
         return new ResponseEntity<>(update, HttpStatus.OK);
+    }
+
+    @PutMapping("/avatar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateAvatar(@ModelAttribute BrandReq req, @PathVariable Long id) throws IOException {
+        BrandDTO result = brandService.updateAvatar(req, id);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{id}")

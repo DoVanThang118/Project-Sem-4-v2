@@ -28,5 +28,7 @@ public interface UserService {
 
     Page<UserDTO> getUsers(Pageable pageable, Long id, String name, String email, String tel, String address, LocalDate birthday, String type, Long restaurantId, Integer status);
 
-    UserDTO updateAvatar(MultipartFile file, Long id) throws IOException;
+    UserDTO updateAvatar(UserReq req, Long id) throws IOException;
+
+    UserDTO getProfile(Long id);
 }

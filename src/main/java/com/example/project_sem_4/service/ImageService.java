@@ -11,4 +11,6 @@ import java.util.Set;
 @Service
 public interface ImageService {
     ImageDTO uploadImages(MultipartFile multipartFile) throws IOException;
+
+    void deleteImage(String imageUrl) throws IOException;
 }
