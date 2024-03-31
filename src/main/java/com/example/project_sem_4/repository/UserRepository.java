@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public User findByEmail(String email);
 
     @Query(value = "select u from User u " +
-            "join u.restaurant r " +
+            "left join u.restaurant r " +
             "WHERE (:id is null OR u.id in (:id)) " +
             "and (:name is null or u.name like %:name%) " +
             "and (:email is null or u.email like %:email%) " +
