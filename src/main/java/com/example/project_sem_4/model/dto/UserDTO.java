@@ -20,7 +20,7 @@ public class UserDTO {
     private String email;
     private String tel;
     private String address;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String type;
     private Integer status;

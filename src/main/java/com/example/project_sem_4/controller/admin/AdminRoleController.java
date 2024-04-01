@@ -1,4 +1,4 @@
-package com.example.project_sem_4.controller;
+package com.example.project_sem_4.controller.admin;
 
 import com.example.project_sem_4.model.dto.RoleDTO;
 import com.example.project_sem_4.model.req.RoleReq;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/roles")
-@Tag(name = "Role", description = "Role management APIs")
-public class RoleController {
+@RequestMapping("/api/admin/roles")
+@Tag(name = " AdminRole", description = "Admin Role management APIs")
+public class AdminRoleController {
 
     private final RoleService roleService;
 
-    public RoleController(RoleService roleService) {
+    public AdminRoleController(RoleService roleService) {
         this.roleService = roleService;
     }
 
