@@ -5,6 +5,7 @@ import com.example.project_sem_4.entity.Brand;
 import com.example.project_sem_4.entity.Image;
 import com.example.project_sem_4.entity.Order;
 import com.example.project_sem_4.entity.Restaurant;
+import com.example.project_sem_4.model.dto.FinanceDTO;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.mapper.BrandMapper;
 import com.example.project_sem_4.model.mapper.RestaurantMapper;
@@ -171,18 +172,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Double totalRevenue() {
-        List<Restaurant> restaurants = restaurantRepository.findAll();
+    public FinanceDTO totalRevenue(Long id, Integer statusRestaurant) {
+        FinanceDTO financeDTO = new FinanceDTO();
         double totalRevenue = 0.0;
 
-        for (Restaurant res : restaurants) {
-            List<Order> orders = orderRepository.findAllByRestaurantId(res.getId());
-
-            for (Order order : orders) {
-                totalRevenue += order.getTotalMoney();
-            }
+        List<Order> orders = orderRepository.findAllByRestaurant(id, statusRestaurant, 6);
+        financeDTO.setTotalOrder(orders.size());
+        for (Order order : orders) {
+            totalRevenue += order.getTotalMoney();
         }
 
-        return totalRevenue;
+        financeDTO.setTotalRevenue(totalRevenue);
+        return financeDTO;
     }
 }

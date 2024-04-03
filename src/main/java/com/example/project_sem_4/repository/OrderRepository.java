@@ -21,7 +21,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "ORDER BY o.id DESC")
     Page<Order> findOrders(Pageable pageable, Long id, Long userId, Long restaurantId, Integer status);
 
-    List<Order> findAllByRestaurantId(Long id);
+    @Query(value = "SELECT o FROM Order o JOIN o.restaurant r " +
+            "WHERE (:restaurantId IS NULL OR r.id = :restaurantId) " +
+            "AND (:restaurantStatus IS NULL OR r.status = :restaurantStatus) " +
+            "AND (:status IS NULL OR o.status = :status)")
+    List<Order> findAllByRestaurant(Long restaurantId, Integer restaurantStatus, Integer status);
+
 
     @Query(value = "select o from Order o join o.users u " +
             "where (:userId is null or u.id in (:userId)) " +

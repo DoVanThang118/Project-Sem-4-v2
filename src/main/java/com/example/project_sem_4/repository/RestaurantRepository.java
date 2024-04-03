@@ -56,4 +56,10 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             @Param("rate") Double rate,
             @Param("status") Integer status
     );
+
+    @Query(value = "select r from Restaurant r " +
+            "where (:id is null or r.id = :id) " +
+            "and (:status is null or r.status in :status)"
+    )
+    List<Restaurant> findByRestaurantId(Long id, Integer status);
 }

@@ -1,5 +1,6 @@
 package com.example.project_sem_4.service;
 
+import com.example.project_sem_4.model.dto.FinanceDTO;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.req.BrandReq;
 import com.example.project_sem_4.model.req.RestaurantReq;
@@ -26,5 +27,5 @@ public interface RestaurantService {
 
     Page<RestaurantDTO> getAllRestaurants(Pageable pageable);
 
-    Double totalRevenue();
+    FinanceDTO totalRevenue(Long id, Integer status);
 }

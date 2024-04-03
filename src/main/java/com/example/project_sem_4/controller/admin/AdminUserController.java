@@ -64,7 +64,12 @@ public class AdminUserController {
 
     @PostMapping("/list")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
-    public ResponseEntity<?> getUsers(@RequestBody UserReq req) throws ParseException {
+    public ResponseEntity<?> getUsers(@RequestBody UserReq req, Authentication authentication) throws ParseException {
+        User user = userService.findByEmail(authentication.getName());
+        Long restaurantId = null;
+        if (user.getRestaurant() != null) {
+            restaurantId = user.getRestaurant().getId();
+        }
         Pageable pageable = PageRequest.of(req.getPageNumber(), req.getPageSize());
         Page<UserDTO> page = userService.getUsers(
                 pageable,
@@ -75,7 +80,7 @@ public class AdminUserController {
                 req.getAddress(),
                 req.getBirthday(),
                 req.getType(),
-                req.getRestaurantId(),
+                restaurantId,
                 req.getStatus()
         );
         DataRes res = new DataRes();

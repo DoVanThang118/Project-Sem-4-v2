@@ -1,10 +1,13 @@
 package com.example.project_sem_4.controller.admin;
 
+import com.example.project_sem_4.entity.User;
+import com.example.project_sem_4.model.dto.FinanceDTO;
 import com.example.project_sem_4.model.dto.RestaurantDTO;
 import com.example.project_sem_4.model.req.RestaurantReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
 import com.example.project_sem_4.service.RestaurantService;
+import com.example.project_sem_4.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -24,6 +28,9 @@ public class AdminRestaurantController {
 
     @Autowired
     private RestaurantService restaurantService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
@@ -55,9 +62,16 @@ public class AdminRestaurantController {
 
     @GetMapping("total_revenue")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
-    public ResponseEntity<?> getTotalRevenue() {
-        Double total = restaurantService.totalRevenue();
-        return ResponseEntity.ok(total);
+    public ResponseEntity<?> getTotalRevenue(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        Long restaurantId = null;
+        Integer restaurantStatus = 1;
+        if (user.getRestaurant() != null) {
+            restaurantId = user.getRestaurant().getId();
+            restaurantStatus = user.getRestaurant().getStatus();
+        }
+        FinanceDTO financeDTO = restaurantService.totalRevenue(restaurantId, restaurantStatus);
+        return ResponseEntity.ok(financeDTO);
     }
 
     @PostMapping("/list")
