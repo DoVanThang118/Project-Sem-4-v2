@@ -1,11 +1,14 @@
 package com.example.project_sem_4.service;
 
 import com.example.project_sem_4.entity.User;
+import com.example.project_sem_4.model.dto.FinanceDTO;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.req.OrderReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface OrderService {
@@ -20,4 +23,7 @@ public interface OrderService {
 
     Page<OrderDTO> getAllOrders(Pageable pageable, Long user);
 
+    FinanceDTO totalRevenue(Long id, Integer status);
+
+    public List<Object[]> getTotalRevenueByMonth(Long restaurantId, Integer status);
 }

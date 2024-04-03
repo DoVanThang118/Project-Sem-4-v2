@@ -32,4 +32,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "where (:userId is null or u.id in (:userId)) " +
             "ORDER BY o.id DESC")
     Page<Order> findAllByUserId(Pageable pageable, Long userId);
+
+    @Query("SELECT MONTH(o.createDate) AS month, SUM(o.totalMoney) AS revenue " +
+            "FROM Order o JOIN o.restaurant r " +
+            "WHERE YEAR(o.createDate) = YEAR(CURRENT_DATE) " +
+            "AND (:restaurantId IS NULL OR r.id = :restaurantId) " +
+            "AND (:status IS NULL OR o.status = :status) " +
+            "GROUP BY MONTH(o.createDate)")
+    List<Object[]> getTotalRevenueByMonth(Long restaurantId, Integer status);
 }

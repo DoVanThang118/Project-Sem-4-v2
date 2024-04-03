@@ -1,6 +1,7 @@
 package com.example.project_sem_4.service.impl;
 
 import com.example.project_sem_4.entity.*;
+import com.example.project_sem_4.model.dto.FinanceDTO;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.mapper.OrderMapper;
 import com.example.project_sem_4.model.req.OrderReq;
@@ -131,5 +132,24 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderDTO> getAllOrders(Pageable pageable, Long userId) {
         Page<Order> orders = orderRepository.findAllByUserId(pageable, userId);
         return orders.map(OrderMapper.INSTANCE::mapEntityToDTO);
+    }
+
+    @Override
+    public FinanceDTO totalRevenue(Long id, Integer statusRestaurant) {
+        FinanceDTO financeDTO = new FinanceDTO();
+        double totalRevenue = 0.0;
+
+        List<Order> orders = orderRepository.findAllByRestaurant(id, statusRestaurant, 6);
+        financeDTO.setTotalOrder(orders.size());
+        for (Order order : orders) {
+            totalRevenue += order.getTotalMoney();
+        }
+
+        financeDTO.setTotalRevenue(totalRevenue);
+        return financeDTO;
+    }
+
+    public List<Object[]> getTotalRevenueByMonth(Long restaurantId, Integer status) {
+        return orderRepository.getTotalRevenueByMonth(restaurantId, status);
     }
 }

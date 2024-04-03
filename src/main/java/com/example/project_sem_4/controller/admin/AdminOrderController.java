@@ -1,6 +1,7 @@
 package com.example.project_sem_4.controller.admin;
 
 import com.example.project_sem_4.entity.User;
+import com.example.project_sem_4.model.dto.FinanceDTO;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.model.res.DataRes;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/orders")
@@ -75,5 +78,32 @@ public class AdminOrderController {
         res.setData(orders.getContent());
         res.setPagination(new Pagination(orders.getPageable().getPageNumber(), orders.getSize(), orders.getTotalElements()));
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("total_revenue")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<?> getTotalRevenue(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        Long restaurantId = null;
+        Integer restaurantStatus = 1;
+        if (user.getRestaurant() != null) {
+            restaurantId = user.getRestaurant().getId();
+            restaurantStatus = user.getRestaurant().getStatus();
+        }
+        FinanceDTO financeDTO = orderService.totalRevenue(restaurantId, restaurantStatus);
+        return ResponseEntity.ok(financeDTO);
+    }
+
+    @GetMapping("/revenue-by-month")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public List<Object[]> getTotalRevenueByMonth(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        Long restaurantId = null;
+        Integer restaurantStatus = 1;
+        if (user.getRestaurant() != null) {
+            restaurantId = user.getRestaurant().getId();
+            restaurantStatus = user.getRestaurant().getStatus();
+        }
+        return orderService.getTotalRevenueByMonth(restaurantId, restaurantStatus);
     }
 }
