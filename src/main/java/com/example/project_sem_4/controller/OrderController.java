@@ -64,7 +64,7 @@ public class OrderController {
             case 3 -> "Đã xác nhận đơn hàng, đang chờ thanh toán";
             case 4 -> "Đã xác nhận đơn hàng, đã thanh toán";
             case 5 -> "Đang giao hàng";
-            case 6 -> "Hoàn thành";
+            case 6 -> "Hoàn thành, vui lòng bấm đã nhận đơn hàng";
             case 0 -> "Đã hủy";
             default -> "Không xác định";
         };
