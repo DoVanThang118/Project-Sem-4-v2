@@ -1,15 +1,16 @@
 package com.example.project_sem_4.controller;
 
+import com.example.project_sem_4.entity.Restaurant;
 import com.example.project_sem_4.entity.User;
 import com.example.project_sem_4.model.dto.OrderDTO;
 import com.example.project_sem_4.model.req.OrderReq;
 import com.example.project_sem_4.model.res.DataRes;
 import com.example.project_sem_4.model.res.Pagination;
-import com.example.project_sem_4.service.CartService;
-import com.example.project_sem_4.service.OrderService;
-import com.example.project_sem_4.service.UserService;
+import com.example.project_sem_4.repository.RestaurantRepository;
+import com.example.project_sem_4.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,11 +30,24 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MailService mailService;
+
+    @Value("${spring.mail.send.url.client.order}")
+    private String url;
+
+
     @PostMapping("/create")
     @Transactional
     public ResponseEntity<?> createOrder(@RequestBody OrderReq req, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         OrderDTO create = orderService.saveOrder(req, user);
+        // Gửi mail đến user khi tạo tài khoản thành công
+        String subject = "Đơn hàng của bạn đã được tạo";
+        String body = String.format("Chào %s, Đơn hàng của bạn đã được tạo thành công. Vui lòng truy cập vào %s để xem chi tiết.", user.getName(), url);
+
+        mailService.sendMailUser(user.getEmail(), null, subject, body);
+        //
         return ResponseEntity.ok(create);
     }
 
@@ -41,6 +55,23 @@ public class OrderController {
     public ResponseEntity<?> updateOrder(@RequestBody OrderReq req, @PathVariable Long id, Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         OrderDTO update = orderService.updateOrder(req, id, user);
+
+        // Gửi mail đến user khi tạo tài khoản thành công
+        String subject = "Đơn hàng của bạn đã được cập nhật";
+        String status = switch (req.getStatus()) {
+            case 1 -> "Đang chờ xác nhận đơn hàng, đang chờ thanh toán";
+            case 2 -> "Đang chờ xác nhận đơn hàng, đã thanh toán";
+            case 3 -> "Đã xác nhận đơn hàng, đang chờ thanh toán";
+            case 4 -> "Đã xác nhận đơn hàng, đã thanh toán";
+            case 5 -> "Đang giao hàng";
+            case 6 -> "Hoàn thành";
+            case 0 -> "Đã hủy";
+            default -> "Không xác định";
+        };
+        String body = String.format("Chào %s, Đơn hàng của bạn đã được cập nhật thành công. Trạng thái hiện tại: %s. Vui lòng truy cập vào %s để xem chi tiết.", user.getName(), status, url);
+
+        mailService.sendMailUser(user.getEmail(), null, subject, body);
+        //
         return ResponseEntity.ok(update);
     }
 
