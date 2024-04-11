@@ -25,5 +25,7 @@ public interface OrderService {
 
     FinanceDTO totalRevenue(Long id, Integer status);
 
-    public List<Object[]> getTotalRevenueByMonth(Long restaurantId, Integer status);
+    FinanceDTO totalRevenueByMonth(Long id, Integer statusRestaurant);
+
+    List<Object[]> getTotalRevenueByMonth(Long restaurantId, Integer status);
 }

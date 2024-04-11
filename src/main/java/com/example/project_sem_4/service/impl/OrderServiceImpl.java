@@ -149,6 +149,22 @@ public class OrderServiceImpl implements OrderService {
         return financeDTO;
     }
 
+    @Override
+    public FinanceDTO totalRevenueByMonth(Long id, Integer statusRestaurant) {
+        FinanceDTO finance = new FinanceDTO();
+        double totalRevenue = 0.0;
+
+        List<Order> orders = orderRepository.findOrdersOfCurrentMonth(id, statusRestaurant, 6);
+        finance.setTotalOrder(orders.size());
+        for (Order order : orders) {
+            totalRevenue += order.getTotalMoney();
+        }
+
+        finance.setTotalRevenue(totalRevenue);
+        return finance;
+    }
+
+    @Override
     public List<Object[]> getTotalRevenueByMonth(Long restaurantId, Integer status) {
         return orderRepository.getTotalRevenueByMonth(restaurantId, status);
     }

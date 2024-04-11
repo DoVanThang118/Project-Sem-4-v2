@@ -24,8 +24,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT o FROM Order o JOIN o.restaurant r " +
             "WHERE (:restaurantId IS NULL OR r.id = :restaurantId) " +
             "AND (:restaurantStatus IS NULL OR r.status = :restaurantStatus) " +
-            "AND (:status IS NULL OR o.status = :status)")
+            "AND (:status IS NULL OR o.status = :status)"
+    )
     List<Order> findAllByRestaurant(Long restaurantId, Integer restaurantStatus, Integer status);
+
+    @Query("SELECT o FROM Order o JOIN o.restaurant r " +
+            "WHERE MONTH(o.createDate) = MONTH(CURRENT_DATE) " +
+            "AND YEAR(o.createDate) = YEAR(CURRENT_DATE) " +
+            "AND (:restaurantId IS NULL OR r.id = :restaurantId) " +
+            "AND (:restaurantStatus IS NULL OR r.status = :restaurantStatus) " +
+            "AND (:status IS NULL OR o.status = :status)"
+    )
+    List<Order> findOrdersOfCurrentMonth(Long restaurantId, Integer restaurantStatus, Integer status);
 
 
     @Query(value = "select o from Order o join o.users u " +

@@ -94,9 +94,23 @@ public class AdminOrderController {
         return ResponseEntity.ok(financeDTO);
     }
 
+    @GetMapping("total_revenue_by_month")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<?> getTotalRevenueByMonth(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        Long restaurantId = null;
+        Integer restaurantStatus = 1;
+        if (user.getRestaurant() != null) {
+            restaurantId = user.getRestaurant().getId();
+            restaurantStatus = user.getRestaurant().getStatus();
+        }
+        FinanceDTO financeDTO = orderService.totalRevenueByMonth(restaurantId, restaurantStatus);
+        return ResponseEntity.ok(financeDTO);
+    }
+
     @GetMapping("/revenue-by-month")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
-    public List<Object[]> getTotalRevenueByMonth(Authentication authentication) {
+    public List<Object[]> getTotalRevenueByEveryMonth(Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         Long restaurantId = null;
         Integer restaurantStatus = 1;
